@@ -5,7 +5,7 @@ Comme vous allez voir, il y a deux facettes à ce cours. il y a un volet assez t
 
 **[Support de cours](http://www.lrde.epita.fr/~gtochon/MASI/)**
 
-## Introduciton 
+## Introduciton
 
 ### Qu'est ce qu'un signal ?
 
@@ -70,7 +70,7 @@ $|z|^2 = z * \bar{z}$
 :::
 
 
-Le signal est un module borné. 
+Le signal est un module borné.
 :::info
 $\bar{\mathbb{R}} = \mathbb{R} \cup \{+\infty; -\infty\}$
 :::
@@ -86,13 +86,13 @@ C'est un espace vectoriel.
 En pratique dans cet espace vectoriel on va pouvoir definir:
 * une base
 * un produit scalaire
-* une norme 
+* une norme
 
 ### Fonctionnement du radar
 
 > Une onde se propage puis va buter contre un obstacle et refléchi un signal vers l'émeteur.
 
-L'operation qui mesure la ressemblance entre 2 element est le produit scalaire. 
+L'operation qui mesure la ressemblance entre 2 element est le produit scalaire.
 
 ## Produit scalaire
 
@@ -114,7 +114,7 @@ Si $x,y \in\mathbb{C}^n$.
 
 Produit hermitien (équivalent complexe du produit scalaire):
 :::info
-$<x, y>$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$ 
+$<x, y>$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$
 :::
 
 
@@ -157,7 +157,7 @@ On peut définir une norme à partir d'un produit scalaire: $||x|| = \sqrt{<x,x>
 
 Inégalité de Cauchy Schwarz: $|<x,y>| \leq ||x||.||y||$
 
-On peut définir une distance à partir d'une norme : 
+On peut définir une distance à partir d'une norme :
 $$d(x,y)=\sqrt{<x-y,x-y>}$$
 
 
@@ -180,7 +180,7 @@ Ensemble des signaux d'énergie finie :
 $x \in \mathcal{L}^2(\mathbb{R}) \Longleftrightarrow \int_\mathbb{R} |x(t)|^2 dt < +\infty$ (energie du signal)
 
 
-Dans $\mathcal{L}^2 , <x,y> = \int_{\mathbb{R}} x(t) \bar{y(t)}$ 
+Dans $\mathcal{L}^2 , <x,y> = \int_{\mathbb{R}} x(t) \bar{y(t)}$
 
 
 Si $x, y$ à valeurs réelle $$<x,y>=\int_\mathbb{R}x(t) y(t) dt\\
@@ -193,19 +193,14 @@ $$ \Gamma_{x_{ref}y}(\tau) ~ =  ~ <x_{ref}(t),y(t-\tau)> ~ = ~ \int{_\mathbb{R}x
 $y(t-\tau)  = y(t)$ retardé d'un facteur $\tau$
 $y_\tau(t)  = y(t-\tau)$
 $y_\tau(0)  = y(-\tau) \Longleftrightarrow y(0)=y_\tau(\tau)$
-
 :::
- 
- 
-
-
 
 ### Autocorrélation de x :
 
 $$x \in \mathcal{L}^2 (\mathbb{R}), \Gamma_{xx}(\tau) ~ = ~ <x(t), x(t - \tau)> = \int_{\mathbb{R}}x(t) \overline{x(t - \tau)} dt$$
 
 
-* 1^er^ propriété 
+* 1^er^ propriété
   * $\Gamma_{xx}$ est maximale pour $\tau=0$
   * $\Gamma_{xx}(0) = <x(t),x(t)> = \int_\mathbb{R}(x(t)^2)dt = ||x||^2 = \bar{\tau}_x$ car $\sqrt{<x(t),x(t)>} = ||x||$
 
