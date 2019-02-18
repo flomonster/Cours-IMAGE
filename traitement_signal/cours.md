@@ -38,7 +38,7 @@ Si l'on s'arrête aux images, (classe restreinte) on peut voir des application m
 
 **Question :** Pourquoi le son est échantilloné 44.1kHz ?
 
-> Theoreme de shannon: il faut que le signal soit echantillonné à une fréquence deux fois plus importante que la fréquence maximale cible (l'oreille humaine entend jusqu'a 20kHz, donc on échantillonne le son à 44kHz).
+> Théorème de shannon: il faut que le signal soit echantillonné à une fréquence deux fois plus importante que la fréquence maximale cible (l'oreille humaine entend jusqu'a 20kHz, donc on échantillonne le son à 44kHz).
 
 ### Comment fonctionne une oreille ?
 
@@ -99,7 +99,7 @@ L'operation qui mesure la ressemblance entre 2 element est le produit scalaire.
 $$
     x = \begin{pmatrix}x_1\\x_2\end{pmatrix}\\
     y = \begin{pmatrix}y_1\\y_2\end{pmatrix} \\
-    <x,y> = x_1 \times y_1 + x_2 \times y_2 = ||x|| . ||y||.cos(\theta) = \sqrt{x_1^2 + x_2^2}
+    \langle x,y \rangle = x_1 \times y_1 + x_2 \times y_2 = ||x|| . ||y||.cos(\theta) = \sqrt{x_1^2 + x_2^2}
 $$
 
 Si $x,y \in\mathbb{R}^n$ c'est pareil.
@@ -107,14 +107,14 @@ Si $x,y \in\mathbb{R}^n$ c'est pareil.
 $$
     x = \begin{pmatrix}x_1\\\vdots\\x_n\end{pmatrix}\\
     y = \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} \\
-    <x,y> = x_1 \times y_1 + ... + x_n \times y_n = \sum_{i=1}^nx_i y_i = x^Ty=(x-x_n)\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix}
+    \langle x,y\rangle  = x_1 \times y_1 + ... + x_n \times y_n = \sum_{i=1}^nx_i y_i = x^Ty=(x-x_n)\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix}
 $$
 
 Si $x,y \in\mathbb{C}^n$.
 
 Produit hermitien (équivalent complexe du produit scalaire):
 :::info
-$<x, y>$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$
+$\langle x, y  \rangle$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$
 :::
 
 
@@ -122,22 +122,22 @@ $<x, y>$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$
 
 > $$
 \begin{align}
-    <:> : &  E \times E \rightarrow \mathbb{R} \\
-          & (x, y) \rightarrow <x,y>
+    \langle :\rangle  : &  E \times E \rightarrow \mathbb{R} \\
+          & (x, y) \rightarrow \langle x,y\rangle
 \end{align}
 $$
 
 
-1) Symetrie $\forall x,y \in E : <x,y> = <y,x>$
-2) Bilinearite $\forall x,x_2, y \in \mathbb{E} <x,y> = <y,x> + \lambda <x_2,y>$
-3) Positivité: $\forall x \in E, <x,x> \geq 0$
-4) Définition: $<x,x>=0 \Longleftrightarrow x=0_E$
+1) Symetrie $$\forall x,y \in E : \langle x,y\rangle  = \langle y,x\rangle $$
+2) Bilinearite $\forall x,x_2, y \in \mathbb{E} \langle x,y\rangle  = \langle y,x \rangle + \lambda \langle x_2,y \rangle$
+3) Positivité: $\forall x \in E, \langle x,x\rangle  \geq 0$
+4) Définition: $\langle x,x\rangle =0 \Longleftrightarrow x=0_E$
 
 Si produit hermitien
 
-* Symétrie hermitienne: $<x,y> = \bar{<y,x>}$
-* Semilinéarité: $$<x_1+\lambda x_2,y>=<x_1,y> + \lambda <x_2, y>\\
-                   <x,y_1 + \lambda y_2> = <x,y_1> + \lambda <x,y_2>$$
+* Symétrie hermitienne: $\langle x,y \rangle = \bar{ \langle y,x \rangle}$
+* Semilinéarité: $$\langle x_1+\lambda x_2,y \rangle= \langle x_1,y \rangle + \lambda \langle x_2, y \rangle\\
+                   \langle x,y_1 + \lambda y_2 \rangle = \langle x,y_1 \rangle + \lambda \langle x,y_2 \rangle$$
 
 
 Norme sur E : $$\begin{align}
@@ -153,23 +153,23 @@ Norme sur E : $$\begin{align}
 3) Inégalité triangulaire: $\forall x,y \in E ||x+y|| \leq ||x|| + ||y||$
 
 
-On peut définir une norme à partir d'un produit scalaire: $||x|| = \sqrt{<x,x>}$
+On peut définir une norme à partir d'un produit scalaire: $||x|| = \sqrt{\langle x,x\rangle}$
 
-Inégalité de Cauchy Schwarz: $|<x,y>| \leq ||x||.||y||$
+Inégalité de Cauchy Schwarz: $|\langle x,y \rangle| \leq ||x||.||y||$
 
 On peut définir une distance à partir d'une norme :
-$$d(x,y)=\sqrt{<x-y,x-y>}$$
+$$d(x,y)=\sqrt{\langle x-y,x-y \rangle}$$
 
 
 On veut définir un produit scalaire entre signaux / fonctions
 
 
-$$<x,y>=x^Ty = \sum_{i=1}^nx_iy_i\\
+$$\langle x,y \rangle=x^Ty = \sum_{i=1}^nx_iy_i\\
 \begin{pmatrix}x_1\\\vdots\\x_n\end{pmatrix} \in \mathbb{R}^n$$
 
 Avec des éléments continus, $\sum$ va devenir $\int$
 
-Une fonction $x : I \rightarrow R / C$ est integrable sur $I$ ssi $\int_I x(t) dt < +\infty$
+Une fonction $x : I \rightarrow R / C$ est integrable sur $I$ ssi $\int_I x(t) dt \langle +\infty$
 
 * $\mathcal{L}^1(I) =$ espace des fonctions intégrables sur $I$
 * $\mathcal{L}^P(I) =$ espace des fonctions p-intégrables sur $I$
@@ -177,42 +177,379 @@ Une fonction $x : I \rightarrow R / C$ est integrable sur $I$ ssi $\int_I x(t) d
 Si $I=\mathbb{R}$ et $p=2$ $\mathcal{L}^2(\mathbb{R})=$ espace des fonctions de carré intégrable
 
 Ensemble des signaux d'énergie finie :
-$x \in \mathcal{L}^2(\mathbb{R}) \Longleftrightarrow \int_\mathbb{R} |x(t)|^2 dt < +\infty$ (energie du signal)
+$x \in \mathcal{L}^2(\mathbb{R}) \Longleftrightarrow \int_\mathbb{R} |x(t)|^2 dt \langle +\infty$ (energie du signal)
 
 
-Dans $\mathcal{L}^2 , <x,y> = \int_{\mathbb{R}} x(t) \bar{y(t)}$
+Dans $\mathcal{L}^2 , \langle x,y \rangle = \int_{\mathbb{R}} x(t) \bar{y(t)}$
 
 
-Si $x, y$ à valeurs réelle $$<x,y>=\int_\mathbb{R}x(t) y(t) dt\\
-E_x = \int_\mathbb{R}|x(t)|^2dt = \int_{\mathbb{R}}x(t)\overline{x(t)}dt=<x,x>||x||^2=E_x$$
+Si $x, y$ à valeurs réelle $$\langle x,y \rangle=\int_\mathbb{R}x(t) y(t) dt\\
+E_x = \int_\mathbb{R}|x(t)|^2dt = \int_{\mathbb{R}}x(t)\overline{x(t)}dt=\langle x,x \rangle||x||^2=E_x$$
 :::info
 Définition de la fonction d'inter corrélation entre $x_{ref}$ et $y$
 
-$$ \Gamma_{x_{ref}y}(\tau) ~ =  ~ <x_{ref}(t),y(t-\tau)> ~ = ~ \int{_\mathbb{R}x_{ref}(t)\overline{y(t-\tau)} dt}$$
+$$ \Gamma_{x_{ref}y}(\tau) ~ =  ~ \langle x_{ref}(t),y(t-\tau)\rangle ~ = ~ \int{_\mathbb{R}x_{ref}(t)\overline{y(t-\tau)} dt}$$
 
 $y(t-\tau)  = y(t)$ retardé d'un facteur $\tau$
 $y_\tau(t)  = y(t-\tau)$
 $y_\tau(0)  = y(-\tau) \Longleftrightarrow y(0)=y_\tau(\tau)$
+
 :::
+
+
+
+
 
 ### Autocorrélation de x :
 
-$$x \in \mathcal{L}^2 (\mathbb{R}), \Gamma_{xx}(\tau) ~ = ~ <x(t), x(t - \tau)> = \int_{\mathbb{R}}x(t) \overline{x(t - \tau)} dt$$
+$$x \in \mathcal{L}^2 (\mathbb{R}), \Gamma_{xx}(\tau) ~ = ~ \langle x(t), x(t - \tau)\rangle = \int_{\mathbb{R}}x(t) \overline{x(t - \tau)} dt$$
 
 
 * 1^er^ propriété
   * $\Gamma_{xx}$ est maximale pour $\tau=0$
-  * $\Gamma_{xx}(0) = <x(t),x(t)> = \int_\mathbb{R}(x(t)^2)dt = ||x||^2 = \bar{\tau}_x$ car $\sqrt{<x(t),x(t)>} = ||x||$
+  * $\Gamma_{xx}(0) = \langle x(t),x(t)\rangle = \int_\mathbb{R}(x(t)^2)dt = ||x||^2 = \bar{\tau}_x$ car $\sqrt{ \langle x(t),x(t)\rangle} = ||x||$
 
 
 * 2^éme^ propriété
     * $\Gamma_{xx}(\tau) = \overline{\Gamma_{xx}(\tau)}$ symetrie hermitienne
-    * Si x est à valeurs réelles : $\Gamma_{xx}(- \tau) = \Gamma(\tau)$ : l'auto correlation est paire
+    * Si x est à valeurs réelles : $\Gamma_{xx}(- \tau) = \Gamma(\tau)$ : l'autocorrélation est paire
 
 * 3^éme^ propriété
     * $\forall \tau \in \mathbb{R}, |\Gamma_{xx}(\tau)| \leq \Gamma_{xx}(0)$
 
-* Si $x$ est T-periodique : $x(t - \tau) = x(t)$
+* Si $x$ est T-périodique : $x(t - \tau) = x(t)$
+  $\Gamma_{xx}(T)  = \langle x(t), x(t - \tau) \rangle ~ = ~ \langle x(t),x(t)\rangle ~ = ~ \Gamma_{xx}(0)$
+  $\Gamma_{xx}$ est périodique
 
-$\Gamma_{xx}(T)  = <x(t), x(t - \tau)> = <x(t),x(t)> = \Gamma_{xx}(0)$
-$\Gamma_{xx}$ est periodique
+
+---
+
+### Intercorrélation
+
+> On va peu faire d'autocorrélation, on va travailler avec de l'**intercorrélation**.
+> Au lieu de comparer la ressemblance entre x et x retardé, on va comparer x et y.
+
+Intercorrelation de 2 signaux $x, y \in \mathcal{L}^2(\mathbb{R})$, $y(t)=x(t-t_0)$ :
+
+\begin{align}
+\Gamma_{xy}(\tau) &= \langle x(t), y(t-\tau)\rangle = \int_\mathbb{R}x(\tau)\overline{y(t-\tau)}dt\\
+&= \langle x(t), y(t-\tau)\rangle \\
+&= \langle x(t),x((t-t_0)-\tau)\rangle\\
+&= \underbrace{\langle x(t), x(t-(t_0 + \tau))\rangle}_{\Gamma_{xx}(t_0-\tau)}
+\end{align}
+
+
+
+\begin{align}O_x \Gamma_{xx}\text{ est maximale en } & 0 = t_0 + \tau  \\
+& \tau = - t_0\end{align}
+
+
+:::success
+Donc $\Gamma_{xy}$ est maximale en $- t_0$
+:::
+
+$$y(t) = x(t) + \eta(t) \thicksim \mathcal{N}(0,\sigma^2)$$
+
+\begin{align}
+\Gamma_{xy}(\tau) &= \langle x(t), y(t - \tau) \rangle \\
+&=\langle x(t), x(t-\tau) + \eta_\sigma (t - \tau) \rangle \\
+&= \langle x(t), x(t-\tau) \rangle +  \langle x(t), \eta_\sigma (t - \tau) \rangle\\
+&=\Gamma_{xx}(\tau)\\
+&=E[X \eta_\sigma] = E[X] E[\eta_\sigma] = 0
+\end{align}
+
+
+Si $x$ et $y$ sont 2 variables independantes alors $E[xy] = E[x] E[y]$
+
+## Convolution
+
+> C'est l'opération mathématique derriere tous les filtrages.[name=Tochon]
+
+Soit $f,g \in \mathcal{L}^1(\mathbb{R})$.
+
+On appelle produit de la convolution de $f$ et de $g$ l'opération :
+$$(f * g)(t) = \int^{+\infty}_{-\infty}f(x)g(t-x)dx
+= \int^{+\infty}_{-\infty} g(x)f(t -x)dx
+$$
+
+> La convolution c'est "juste" une moyenne pondérée glissante généralisée [name=Tochon]
+
+#### Propriétés :
+
+1) Existence du produit de convolution :
+  Pour que $x * y$ existe, il suffit que $x,y \in \mathcal{L}'(\mathbb{R})$
+  Auquel cas, $(x * y) \in  \mathcal{L}^1(\mathbb{R})$
+  Rappel: $x \in \mathcal{L}'(\mathbb{R}) \Leftrightarrow \int_\mathbb{R}|x(t)|dt < + \infty$
+
+2) Le produit de convolution est commutatif : $(x * y) = (y * x)$
+3) Le produit de convolution est bilinéaire : $x * (y + \lambda z) = (x*y) + \lambda (x * z)$
+4) Le produit de convolution est associatif : $(x*y)*z = x*(y*z)$
+5) Le produit de convolution admet un élement neutre. Le delta de Dirac :
+$$\delta : t \rightarrow
+\begin{cases}
+    0 ~ \forall t \neq 0 \\
+    +\infty t = 0
+\end{cases} \\
+\int_\mathbb{R} \delta(t)dt = 1
+$$
+
+:::success
+$\mathcal{L}^1(\mathbb{R})$ munit du produit de convolution forme donc un monoïde commutatif.
+:::
+
+#### Symetrie :
+
+Si $x$ et $y$ sont des signaux soit pairs soit impairs. $(x * y)$ est  paire ssi $x$ et $y$ sont de même parite.
+
+$(x*y)$ est impaire ssi $x$ et $y$ sont de parité opposés.
+
+#### Dérivée:
+
+Si $x, y  \in \mathcal{L}'(\mathbb{R})$ et sont derivables avec $x',y' \in \mathcal{L}'(\mathbb{R})$
+
+$(x*y)'=x'*y=x*y'$
+
+#### Fonction porte
+
+$\Pi_T(t)=\begin{cases}1 ~\forall t\in [-\frac{T}{2}; \frac{T}{2}] \\ 0 ~ \text{sinon}\end{cases}$
+
+![Représentation fonction porte](https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Dfqwz-iTOmojUspk9cLrJwHaFH%26pid%3D15.1&f=1)
+
+[Elle est fausse, la notre vaut 1 aux bornes. TODO]
+
+
+\begin{align}
+(\Pi_{T} * \Pi_{T} )(t) &= \int_{\mathbb{R}} \underbrace{\Pi_{T}(x)}_{0 \text{ si } x \notin [-\frac{T}{2};\frac{T}{2}]} \Pi_{T}(t -x)dx \\
+                        &= \int_{-\frac{T}{2}}^{\frac{T}{2}}\Pi_T(t-x)dx
+\end{align}
+
+* Pas de chevauchement $\Leftrightarrow |t| > T$
+* Chevauchement max $t = 0$
+
+$$(\Pi_T * \Pi_T)(0)=\int_{-\frac{T}{2}}^{\frac{T}{2}} 1 dx = T$$
+
+* Si $0 < t < T$
+
+$$(\Pi_T * \Pi_T)(t)=\int_{t-\frac{T}{2}}^{\frac{T}{2}}dx = \frac{T}{2} - (t - \frac{T}{2}) = T - t$$
+
+* Si $-T < t < 0$
+$(\Pi_{T} * \Pi_{T})(t) = \int_{\frac{-T}{2}}^{t + \frac{T}{2}}dx = t+ \frac{T}{2} +\frac{T}{2}$
+
+:::warning
+Ca été donné au partiel de MASI des Ing1. Donc ca sera potentiellement à notre partiel.
+:::
+
+
+
+$$\Gamma_{xy}(\tau) = \langle x(t), y(t-\tau)\rangle = \int_\mathbb{R}x(\tau)\overline{y(t-\tau)}dt\\
+(x * y)(\tau) = \int_\mathbb{R}x(t)y(t-\tau)dt\\
+y^-(t)=y(-t)$$
+\begin{align}
+(x*y^-)(\tau) &= \int_\mathbb{R}x(t)y^-(\tau - t)dt\\
+              &= \int_\mathbb{R}x(t)y(t - \tau)dt\\
+\end{align}
+
+$$(x*\bar{y})(\tau)=\int_\mathbb{R}x(x(t)\overline{y^-(\tau - t)}dt) = \int_\mathbb{R}x(t)\overline{y(t - \tau)}dt=\Gamma_{xy}(\tau)
+$$
+
+:::success
+$$\Gamma_{xy}  = (x * \overline{y^{-}})$$
+:::
+
+:::info
+**Convolution filtrage :** opération mathématique produit de convolution
+**Corrélation :** motif dans un signal
+:::
+
+> On ne peut pas faire pire qu'un cours de Siarry [name=Tochon]
+
+## Série de Fourier
+
+:::info
+Né au milieu du 18ème siecle, doit son nom à Fourier pour résoudre une équation de la chaleur (comment la chaleur se propage dans une barre)
+Travaux début 1800, les premiers résultats mathématiques sont en 1830.
+:::
+
+Un phénomene vibratoire peut se séparer en superposition de phénomène vibratoire.
+> Exemple: la lumière blanche qui se décompose en beaucoup de longueurs d'ondes différentes.
+
+
+### Principe de superposition:
+
+> Décomposition d'un phenomene vibratoire complexe en une superpostion de phénomènes vibratoires simples.
+
+* Sytème vibratoire complexe: Signal périodique de periode T.
+* Systeme vibratoire simple: Onde sinusoidale $A \sin(2\pi ft + \phi)$
+
+$\sin(x) \rightarrow \text{periode } 2 \pi$
+
+![Sinus function](https://www.mathsisfun.com/algebra/images/sine-graph.svg)
+
+Calcul de période:
+* $\sin(\frac{2\pi}{T}x) \Rightarrow T$
+* $\sin(2\pi\frac{n}{T}x) \Rightarrow \frac{T}{n}$
+* $\sin(2\pi x) \Rightarrow 1$
+* $\sin(x) \Rightarrow 2\pi$
+
+$$\begin{align}
+x(t) &= \sum^{N}_{n=1} A_n \sin(2\pi\frac{n}{T}t + \phi_n) \\
+     &= A_1 \sin(\underbrace{\frac{2\pi}{T}}_{\text{fréquence fondamentale } f = \frac{1}{T}} t+d_1) + \dots + A_N \sin(2\pi \frac{N}{T}t + \phi_N)
+\end{align}$$
+
+:::info
+**Notations :**
+* $w = \frac{2\pi}{T} =$ pulsation
+* $f =$ fréquence
+* $T = \frac{1}{f} =$ période
+:::
+---
+
+:::info
+**Rappels :**
+$\sin(a + b) = \sin a \cos b + \cos a \sin b$
+$\cos(a + b) = \cos a \cos b - \sin a \sin b$
+:::
+
+\begin{align}
+x(t) &= a_0 + \sum^{N}_{n = 1} A_n[\sin(2 \pi \frac{n}{T} t) \cos(\phi_n) + \cos(2 \pi \frac{n}{T} t) \sin (\phi_n)]\\
+&= a_0 + \sum^{N}_{n = 1} A_n \sin(\phi_n) \cos(2 \pi \frac{n}{T} t) + A_n \cos(\phi_n) \sin(2 \pi \frac{n}{T} t) \\
+&= a_0 + \sum^{N}_{n = 1}a_n  \cos(2  \pi \frac{n}{T}  t) + b_n  \sin(2  \pi  \frac{n}{T}  t )
+\end{align}
+
+
+#### Decomposition des termes
+
+$$S_n = \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T} t) + b \sin(2\pi \frac{n}{T} t)$$
+
+$S_1 = a_1 \cos(2\pi \frac{1}{T} t)$
+$S_2 = a_1 \cos(2\pi \frac{1}{T} t) + a_2 \cos(2\pi \frac{2}{T} t)$
+
+---
+
+
+$x(t) = a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2 \pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
+
+> Comment déterminer ces coefficients : $a_0, \{a_n, b_n\}_{n \geq 1}$ ?
+
+#### Lemme #1
+
+Soit x une fonction T-périodique
+
+\begin{align}
+\int_0^T x(t)dt &= \int_a^{a + T} x(t)dt ~ \forall a \\
+                &= \int_{-\frac{T}{2}}^{\frac{T}{2}} x(t)dt
+\end{align}
+
+
+#### Lemme #2
+
+$$\int_{0}^{T} \cos(2\pi \frac{n}{T} t) \cos(2\pi \frac{k}{T}t)dt =
+\int_{-\frac{T}{2}}^{\frac{T}{2}} \cos(2\pi \frac{n}{T} t) \cos(2\pi \frac{k}{T}t)dt =
+\begin{cases}0 ~ n\neq k\\\frac{T}{2} ~ n = k\end{cases}$$
+
+#### Lemme #3
+$$\int_{0}^{T} \sin(2\pi \frac{n}{T} t) \sin(2\pi \frac{k}{T}t)dt =
+\int_{-\frac{T}{2}}^{\frac{T}{2}} \sin(2\pi \frac{n}{T} t) \sin(2\pi \frac{k}{T}t)dt =
+\begin{cases}0 ~ n\neq k\\\frac{T}{2} ~ n = k\end{cases}$$
+
+:::info
+**Rappel :**
+$\cos a \cos b = \frac{1}{2} (\cos (a+b) + \cos(a - b))$
+:::
+
+
+#### Preuve du lemme #2
+
+* Si $n \neq k$ :
+$$
+\int_{0}^{2\pi} \cos(nt) * \cos(kt) dt =  \int_{0}^{2 * \pi} 1 / 2 * (\cos(n + k)t) + \cos((n - t)t) dt\\
+\frac{1}{2} \int_0^{2\pi} \cos((n + k)t)dt + \frac{1}{2} \int_0^{2\pi} \cos((n - k)t)dt \\
+= \frac{1}{2} [\frac{1}{n +k} \sin((n + k)t)]_{0}^{2\pi} + \frac{1}{2}[\frac{1}{n - k} \sin ((n - k)t)]_0^{2\pi}\\
+= \frac{1}{2} \frac{1}{n+k}(\underbrace{\sin((n+k)2\pi)}_{=0} - \underbrace{\sin((n+k)0)}_{=0} + \dots = 0
+$$
+
+* Si $n = k$ :
+$$
+\cos^2(a)=\frac{1+\cos(2a)}{2} \\
+\int_0^{2\pi}\cos^2(nt)dtA \\
+= \int_0^{2\pi}\frac{1+cos(2nt)}{2}dt
+= \int_0^{2\pi}\frac{1}{2}dt + \int_0^{2\pi}\frac{cos(2nt)}{2}dt \\
+= \frac{1}{2}\int_0^{2\pi}cos(2nt)dt
+= \frac{1}{2}[\frac{1}{2n}\sin(2nt)]^{2\pi}_0 = 0
+$$
+
+
+#### Lemme #4
+
+$$
+\int_{0}^{T} (\cos(2\pi * \frac{n}{T} t) * sin(2\pi * \frac{k}{T}t)  dt))
+$$
+
+
+On suppose toujours que $x(t) = a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi\frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
+
+$a_0$: On integre entre $0$ et $T$
+
+
+\begin{align}
+\int_0^T x(t) dt &= \int_0^T [a_0 \cos(2\pi \frac{n}{T}t) + b_n \sin (2\pi \frac{n}{T})]dt\\
+                  &= \int_0^T + \sum_{n = 1}^{+\infty} \int_0^T a_n cos(2\pi \frac{n}{T}) dt )\\
+                  &= T a_0 + \sum^{+\infty}_{n=1}a_n\underbrace{\int_0^T\cos(2\pi \frac{n}{T}t)dt}_{=0} + \sum_{n=1}^{+\infty}b_n \underbrace{\int_0^T\sin(2\pi\frac{n}{T}t)dt}_{=0}
+\end{align}
+
+
+$a_0 = \frac{1}{T} \int_0^T x(t)dt \equiv$ valeur moyenne de $x$ sur une periode
+
+---
+
+$\{a_n: n \geq 1\}$: On cherche $a_k$, $\forall k \in \mathbb{N}^*$
+
+
+On multiplie par $\cos (2\pi \frac{k}{T}t)$ l'egalite puis on integre entre 0 et T.
+
+\begin{align}
+x(t)cos(2\pi \frac{k}{T}t) &= a_0 \cos(2\pi \frac{k}{T}t) + \sum_{n+1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) \cos(2\pi \frac{k}{T}t) + b_n \sin(2\pi \frac{n}{T}t) \cos(2\pi \frac{k}{T}t)\\
+\end{align}
+
+
+
+
+\begin{align}
+\int_0^T x(t) cos(2\pi t\frac{k}{T}) dt &= a_0 \int_0^T cos(2\pi tk/T) dt \\
+                                        &\underbrace{+ \sum_{n=1}^{+\infty}a_n + \int_{n = 1}{+\infty}\sin(2n * \frac{n}{T})\cos(2n \frac{k}{T}t) dt}_{\text{tous les termes sont nuls sauf le $k^{ième}$, qui vaut $a_k \frac{T}{2}$}}\\
+                                        = a_k \times \frac{T}{2}
+\end{align}
+
+
+
+$a_n = \frac{2}{T} \int_0^T x(t) \cos(2\pi \frac{n}{T}t)dt \: \forall n \ge 1$
+Et $b_n = \frac{2}{T} \int_0^T x(t) \sin(2\pi \frac{n}{T}t)dt \: \forall n \ge 1$
+
+### Fonction continue par morceaux sur un intervalle $[a,b]$
+
+$x \in \mathcal{C}_{pm}^o ([a,b])$ si $x$ est continue sur $[a,b]$, sauf a un certain nombre de points de discontinuité $a_i$, tq $x(a_i)=\lim_{t \rightarrow a;\\t < a;} x(t)$
+
+
+et $x(a_i^+) = \lim_{t \rightarrow a;\\ t > a;}  x(t)$ mais potentiellement $x(a_i) \neq x(a_i^-) \neq x(a_i^+)$
+
+![fonction discontinue](https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F0%2F0e%2FFonction_discontinue.png&f=1)
+
+Fonction dérivable par morceaux $(\mathcal{C}^1_{pm})$ sur $[a,b]$
+* $x$ dérivable sur $[a,b]$ sauf éventuellement en un certain nombre de points pour lesquels il est possible de définir des limites à gauche et à droite de la derivée.
+
+
+#### Théoreme de Dirichlet
+
+Soit un signal T-périodique et $\mathcal{C}^1_{pm}$. Alors en tout point de continuité de $x$, on a :
+$\displaystyle x(t) = a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
+
+Si $x$ discontinue en $t_0$:
+$$
+a_0 + \sum^{+\infty}_{n=0}a_n \cos(2\pi \frac{n}{T}t_0) + b_n \sin(2\pi \frac{n}{T}t_0) = \frac{1}{2}(x(t_0^-) + x(t_0^+))\\
+$$
+avec
+\begin{align}
+a_0 &= \frac{1}{T} \int_0^Tx(t)dt\\
+a_n &= \frac{2}{T} \int_{0}^T x(t) \cos(2 \pi \frac{n}{T}t)dt\\
+b_n &= \frac{2}{T} \int_{0}^T x(t) \sin(2 \pi \frac{n}{T}t)dt\\
+\end{align}
