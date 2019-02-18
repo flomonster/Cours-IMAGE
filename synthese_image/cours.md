@@ -1,6 +1,12 @@
+---
+link: https://hackmd.io/ETHfa8siRYWG1AYEFZ7xMA?both
+---
+
 # Introduction à la synthèse d'images
 
-## Séance de projet:
+![Pres](https://dailygeekshow.com/wp-content/uploads/2013/07/the-pixar-theory-tous-les-personnages-vivraient-dans-le-meme-univers.jpg)
+## Introduction
+### Séance de projet:
 
 Peut être libre -> voir si le projet propose convient.
 
@@ -30,7 +36,9 @@ Le projet :
 * Un rapport (quelques pages 24h ou 48h avant la soutenance).
 * Une vidéo de 1/2 minutes. Ca peut être une vidéo animé ou autre.
 
-## Partie 1 : Rendu temps réel vs rendu photo réaliste
+On peut trouver des idées de projet avec des articles associés. 
+
+### Partie 1 : Rendu temps réel vs rendu photo réaliste
 
 La synthese d’image est le fait de modeliser une forme , apparence du monde reel ou d’objets imaginaires avec un ordi.
 
@@ -59,7 +67,7 @@ Tricher pour faire un rendu plus rapide. Les techniques de rendu temps réel von
 
 
 
-## Partie 2 : 
+### Partie 2 : 
 
 Les domaines de l'image:
 
@@ -108,7 +116,7 @@ Il y a des domaines liés :
 * Programmation GPU
 * Traitement d'images (image Hight Dynamic Range HDR)
 
-## Historique
+### Historique
 
 Base : invention de l'écran CRT
 
@@ -157,7 +165,7 @@ On a les premier jeux et films 3D dans les années 80.
 * Myst (1993) / Riven (1997) / Exil (2002)
 * Descent (1995) / Terminal velocity (1995) / Flight Gear Simulator
 
-## Applications
+### Applications
 
 * Réalité augmentée
 * Cinéma
@@ -171,7 +179,7 @@ On a les premier jeux et films 3D dans les années 80.
 
 Il existait des simulateurs avant la VR. Mais ca aide au réalisme...
 
-## Communauté scientifique
+### Communauté scientifique
 
 * ACM SCIGGRAPH (surveiller leurs articles)
 * Synthèse image a jour
@@ -183,7 +191,7 @@ Il existait des simulateurs avant la VR. Mais ca aide au réalisme...
 
 *Second depth shadow mapping* (algo utilisé dans monstre & compagnie)
 
-## Outils
+### Outils
 
 * Modeleurs
 * Outils d'animation
@@ -203,7 +211,7 @@ Il existait des simulateurs avant la VR. Mais ca aide au réalisme...
   * Unity
   * Ogre
 
-## Rappels d'optique et de geometrie euclidienne
+### Rappels d'optique et de geometrie euclidienne
 
 Pour modeliser une scene et faire son rendu, on a une source lumineuse primaire, les objets vont recevoir et absober cette lumiere, ils renvoient la lu miere ce sont des sources lumineuses secondaires.
 
@@ -222,3 +230,418 @@ Comment l'image est capturée ?
 > Le capteur est une matrice, chaque fois qu'un rayon rencontre un capture, il y a une charge électrique, à chaque tic d'horloge on compte le nombre de charge pour savoir si la région est bien limineux, mais on a pas les longueurs d'ondes, utile pour les images noirs et blancs. 
 
 ![Bayer Pattern](https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Bayer_pattern_on_sensor.svg/350px-Bayer_pattern_on_sensor.svg.png)
+
+
+---
+
+### Rappels de mathématique
+
+#### Geometrie euclidienne 
+
+* Produit scalaire : forme bilineaire, symetrique definie positive
+* Espace pré-hilbertien $(E,|)$ réel
+* Produit mixte utilisé pour avoir les angles
+* Produit vectoriel
+* Équation de droites
+    * Intersection de deux plans
+    * Équation paramétrique (un point et un vecteur)
+* Équation d'un plan
+    * Si on a l'équation Cartésienne on peut obtenir l'équation implicite
+    * Paramétrique (un point deux vecteurs) 
+* Équation d'un cercle / d'une sphère
+    * [Équation](https://ggbm.at/y3MJCadK)
+    * Cartésienne : $(x - x_0)^2 + (y - y_0)^2 = r^2$
+    * Paramétrique : $R.cos(\theta) + R.sin(\theta)$
+* Intersection droite / plan    
+    * Calcul de l'intersectio ndans le **repère** local ou global ?
+* Intersection droite / sphere
+    * Pas forcément utile car on peut toujours discrétiser la sphere.
+* Intersecti on droite / triangle
+    * On fait l'intersection avec le plan
+    * On vérifie que le point d'intersection est dans le triangle
+    * Determiner les équations de chaque  côté du triangle
+        * determiner la position de I vis a vis de chaque cote
+        * ...
+
+:::info
+Pour plus d'information voir les slides. [ICI](http://jo.fabrizio.free.fr/teaching/synt/)
+:::
+
+#### Geometrie projective
+
+* Étude des objets tel qu'ils sont vus.
+* Percepption des angles, des distances, du parallelisme distordu.
+* Un ensemble de droite paralléle converge vers un point de fuite sur le plan image.
+
+* Projection sur le plan image
+* L'horizon c'est le plan qui passe par le foyer et qui s'intersecte avec le plan image
+* Le point de fuite est sur l'horizon
+* Les points qui sont sur l'horizon n'ont pas d'antécédant dans la géométrie euclidienne
+
+![Schéma de géométrie projective](https://sites.google.com/site/decouvrart/_/rsrc/1329082996106/5emes/perspectives/plan%20de%20tableau.jpg?height=261&width=400)
+
+Dans le plan :
+* $RP^2$ est l'ensemble des triplets $[p] = [p_1, p_2, p_3]$ avec $(p_1, p_2, p_3)$ dans $\mathbb{R}^3$ privé de $(0,0,0)$
+* Deux point s p et q sont egaux ssi il existe un $k$ dans $\mathbb{R}^*$ tel que:
+    * $p_1 = kq_1$ et $p_2 = kq_2$ et $p_3 = kq_3$
+
+Finalement il y a deux cas :
+* $p_3 = 0 [p_1, p_2, p_3] = [p_1, p_2, 0] \in RP^2$
+* $p_3 \neq 0 [p_1, p_2, p_3] = [p_1 / p_3, p_2 / p_3, 1] \in RP^2$
+
+Représentation des transformation usuelles dans l'espace projectif :
+* Translation : $$\begin{pmatrix}x\\y\end{pmatrix} + \begin{pmatrix}tx\\ty\end{pmatrix}$$
+* Echelle : $$\begin{pmatrix}x\\y\end{pmatrix} \begin{pmatrix}dx & 0\\ 0 & dy\end{pmatrix}$$
+* Rotation $$\begin{pmatrix}x\\y\end{pmatrix} \begin{pmatrix}cos\theta & -sin \theta \\ sin \theta & cos \theta\end{pmatrix}$$
+* Projection : $$\begin{pmatrix}x\\y\\1\end{pmatrix}^t$$
+
+Exemple de combinaison **projection et translation et rotation et scale** :
+> $$
+> \overbrace{
+> \begin{pmatrix}
+>     x \\ y \\ 1
+> \end{pmatrix}^t
+> }^{\text{projection}}
+> \overbrace{
+> \begin{pmatrix}
+>     1 & 0 & tx \\
+>     0 & 1 & ty \\
+>     0 & 0 & 1 
+> \end{pmatrix}
+> }^{\text{translation}}
+> \overbrace{
+> \begin{pmatrix}
+>     cos \theta & -sin \theta & 0 \\
+>     sin \theta & cos \theta & 0 \\
+>     0 & 0 & 1
+> \end{pmatrix}
+> }^{\text{rotation}}
+> \overbrace{
+> \begin{pmatrix}
+>     S_x & 0 & 0 \\
+>     0 & S_y & 0\\
+>     0 & 0 & 1
+> \end{pmatrix}
+> }^{\text{echelle}}
+> $$
+
+Ca nous donne une matrice que l'on peut multiplier pour n'importe quel point de mon plan.
+
+:::danger
+L'ordre des transformation est improtante. Ce n'est pas commutatif.
+:::
+
+##### Quaternion 
+
+[You don't want to click me](https://fr.wikipedia.org/wiki/Quaternion)
+
+:::danger
+/!\ DANGER ZONE /!\ You might feel headache after reading...
+:::
+
+
+## Algorithme photorealiste
+
+* Objectif:
+    * Generation  d'image realiste
+    * Contrainte de temps faible
+
+* Strategies:
+    * Object based rendering algorithm
+        * Illumination globale calculee independemment du point de vue
+    * Image-based rendering algo
+    * Deterministic rendering algo
+    * Monte carlo rendering algo
+
+* Types
+    * Raytracing
+    * path tracing
+    * PBGI (Point based global Illumination)
+    * radiosity
+    * photo map
+
+### Raytracer
+
+On part de la camera à travers le plan jusqu'à l'objet, et voir l'angle d'incidence des diffetentes sources lumineuses.
+
+Il faut détermine la partie **diffuse** et la partie **spéculaire** de la source de lumière.
+
+* Calcul de l'illumination locale :
+    * Composante diffuse
+    * Composante spéculaire
+    * Apport des sources primaires
+    * Apport des sources secondaires
+* Source primaires :
+    * Lumières ponctuelles
+    * Spots
+    * Lumies directionnelles
+    * Objets lumineux
+
+![Schema de source primaires](https://3.bp.blogspot.com/-42wllB7YSd4/V4ADEof7M5I/AAAAAAAAAQM/ITyQaWXYxMsritYbaUvqPQhJMkIMOV5BgCLcB/s1600/1024px-SixLights.jpg)
+
+
+* Modèle local :
+    * La composate diffuse : $I_d = \underbrace{K_d \times C}_{\text{Propriété du matériaux}} \times (N. L) \times I_{Li}$
+    * La composante spéculaire : $I_s = K_s \times I_{Li} \times (S.L)^{ns}$
+
+L'intensité totale est la somme de la ocmposante spéculaire et diffuse.
+
+Il faut ensuite améliorer cette algo car on ne prend pas en compte les obstacles (ombres). On ne tient pas comptes des sources secondaires.
+
+**Sources secondaires :**
+
+Pour gérer les sources secondaire on peut utiliser le rayon réfléchi.
+Celui-ci peut intersecter un autre objet qui va être source de lumière secondaire.
+
+:::warning
+On peut continuer récursivement.
+Soit on fixe un niveau de récursion. Soit on fixe un palier d'intensité sous lequel on arréte la récursion.
+:::
+    
+    
+    
+**Gestion de sombres :**
+
+Il faut envoyer un nouveau rayon vers les sources lumineuse pour vérifier qu'aucun objet est entre le point et la source de lumière.
+    
+#### Recap
+    
+* Avantages
+
+    * L'algorithme est simple
+    * Génère des images honorables
+* Inconvénients 
+    * Temps de calcul lent
+    * Aliasing élevé
+    * Ombre trop brute
+    
+#### Problème de l'*aliasing*
+
+Solutions :
+* Sur-échantillonnage
+    * lancer plusiers rayons pour chaque pixel
+        * De manière organisée
+        * Au hasard
+    * Lancer plusierus rayons pour chaque pixel où le gradient est élevé
+        * Bon résultats mais peut être très lent
+* Post filtrage
+    * Résultat moyen mais très rapide
+
+#### Problème du temps de calcul 
+
+Solution :
+* Partitionner l'espace pour trier les objets selon leur position
+* Utiliser des volumes englobants
+* Pre-trier les objets
+* Calcul parallèle
+* Utilisation d'OpenGl
+* ...
+
+#### Problème des objets transparents
+
+Solution :
+* Utiliser la loi de la réfraction : $n_1 sin(i_1) = n_2 sin(i_2)$
+    * Il faut connaitre en tout point l'indice de réfraction
+* Distribution probabiliste
+
+:::info
+Voir [Cours ](http://jo.fabrizio.free.fr/teaching/synt/isim_rendu_photorealiste.pdf) pour schema + explication
+:::
+
+L'autre problème est de calculer l'ombre des objets transparents.
+Une solution simple est de diminuer l'intensité et de filtre la longueur d'onde sans calculer la déviation.
+Ca donne un résultat faux d'un point de vue réalisme.
+
+#### Problème de l'éclairage indirect
+
+
+Dans les zones d'ombre il ne fait pas complétement noir. Or c'est le cas sur notre rendu. De même les ombres sont délimitées très clairement.
+
+Une solution lazy est de rajouter une heuristic de lumière ambiante.
+
+$$I = k_a \times I_a + I_d + I_s + I_r + I_t$$
+
+On peut considérer les sources lumineuses comme des zones au lieu d'un point.
+
+![Démonstration des pré-ombres](https://mk0imgtecp2od63rj429.kinstacdn.com/wp-content/uploads/2015/07/PowerVR-Ray-Tracing-soft-shadows.gif)
+
+
+Une solution pour gérer l'ombre est de lancer plus de rayons.
+
+#### Problème de profondeur de champs
+
+Notre image est nette même pour les objets qui sont loin.
+Une solution simple est de considérer que le foyer est une zone est pas un point. Cela permet d'imiter le diaphragme de l'oeil.
+
+#### Bilan
+
+* Avantages
+    * Algorithme simple
+    * Donne des images honorables
+* Problemes
+    * Les sources secondaires ne sont pas suffisamment bien gerées
+    * Les objets transparents non plus
+
+
+### La radiosité 
+
+C'est la partie émise par l'objet $i$. Pour pouvoir dire la quantité d'énergie reçue par l'objet, on va se servir des sources lumineuses primaires et secondaires.
+
+
+* $B_i$ la **radiosité** de la surface $i$
+* $E_i$ la quantité de **lumière émise** par la surface $i$ (source primaire)
+* $P_i$ la fraction de **lumière incidente** qui est réfléchie par la surface $i$
+* $F_{ji}$ la fraction de **lumière quittant** la surface $j$ et atteignant la surface $i$
+
+$$B_i = E_i + P_i \sum_j(F_{ji}B_j)$$
+
+:::warning
+Ceci **n'est pas** une technique pour obtenir une image mais juste la *radiosité* d'une scéne. 
+Il faut donc la **combiner** avec une technique de rendu (Ex: Raytracing :stuck_out_tongue_winking_eye:)
+:::
+
+simplement l’illumination globale
+* Avantages :
+    * Prend mieux en compte les sources secondaires
+    * Calculée une fois pour toutes
+* Inconvénients
+    * Tient compte que de la diffusion
+    * Assez lourd
+    * Obligation d’avoir un maillage (il faut discrétiser les surfaces)
+    * Objets transparents ?
+
+### Photon Mapping
+
+* Photon Map
+    * Pré calcul de l’illumination de la scène.
+    * Lancement de rayons lumineux depuis les sources et calcul desaccumulations des photons. 
+* Avantages
+  * Permet de modéliser plus proprement les sources secondaires,les ombres portées (...) et surtout les objets transparents(caustiques).
+* Inconvénients
+    * Calculs
+    * Complexité
+    
+:::warning
+Ceci **n'est toujours pas** une technique pour obtenir une image mais juste la *radiosité* d'une scéne. 
+Il faut donc la **combiner** avec une technique de rendu (Ex: Raytracing :stuck_out_tongue_winking_eye:)
+:::
+
+![Rendu avec photon mapping](https://herbertsstuff.files.wordpress.com/2015/06/photonsmapping7.png)
+
+
+Améliorations :
+* Projection maps
+* visual importance map (3-pass Technique)
+* Shadow photons
+* ...
+
+### Path tracing / Bidirectional Path Tracing
+
+* Résourdre l'illumination
+* Modélisation des propriétés de réflexion des surfaces
+
+:::info
+**BRDF** : Bidirectional reflectance distribution function (Réflectivitébidirectionnelle)
+C'est un algo qui pour un angle donné indique la probabilité qu'un rayon soit renvoyé dans cette direction.
+:::
+
+BRDF:
+* Conservative
+* Récirpocité de Melmholtz
+* Positivité
+
+L'idée c'est contrairement au ray tracing ou on relance un rayon en direction des sources lumineuses et de l'angle de réflection. Ici on relance le rayon de manière aléatoire suivant le **BRDF**.
+
+On espère tomber sur une source lumineuse a un moment. Si ce n'est pas le cas alors notre point est dans l'ombre...
+
+![Path Tracing](https://i.imgur.com/2pQTPrc.png)
+
+* Avantages :
+    * Rendu réaliste
+    * Convient bien aux scènes d’extérieurs
+    * Prend bien en compte l’apport des autres objets
+    * Rend les caustiques
+    * Possibilité de modéliser les effets (profondeur de champ...)
+* Inconvénients :
+    * Lent
+    * Bruité (Il faut beaucoup d’itérations pour converger)
+    * Difficile pour scènes avec des petites sources lumineuses (oudes sources cachées)
+
+
+#### Bidirectional Path tracing
+
+L'idée c'est de lancer aussi des rayons de la source lumineuse et calculer les intéractions entre les deux.
+
+* Amélioration du calcul du rendu.
+* Lancement des rayons depuis l'observateur et depuis les sources.
+
+
+### PBGI: Point-Based Global Illumination
+
+* Méthode pour estimer l’illumination globale
+* Beaucoup utilisée pour le cinéma
+* Avantages
+    * Rapide
+    * Image non bruitée (pas d’artefacts temporel)
+* Inconvénients
+    * Pas aussi précis que leraytracing
+    * Difficile de gérer les effets miroir
+
+
+### Raycasting
+
+Principe :
+> On ne lance que les rayons depuis l'observateur et on ne calcul pas les rebonds...
+
+C'est du faux 3D car on calcul juste la distance avec un rayon puis on affiche un sprite de l'objet.
+
+Ca permet d'avoir du 3D en temps réel sur des machines pauvres.
+
+![Exemple Wolfenstein](https://news-cdn.softpedia.com/images/news2/Wolfenstein-The-Old-Blood-Features-Nightmare-Levels-of-Wolfenstein-3D-Episode-1-480091-2.jpg)
+
+
+## Rendu temps réel
+
+* Principe général
+    * Modélisation des objets dans un repère local
+    * Modélisation de la scène dans un repère global
+    * Projection de la scène sur le plan image
+        
+
+* Algorithmes 3D fondamentaux
+    * Clipping 3D
+    * Projection
+    * Clipping 2D (Si clipping 3D non faite)
+    * Paint
+* Algorithmes 2D fondamentaux
+    
+
+### Algorithmes 3D : Clipping 3D
+
+On utilise un cone de vision avec un Z min (le plan image) et un Z max.
+
+![Schéma du clipping 3D](https://www.scratchapixel.com/images/upload/perspective-matrix/clipping6.png)
+
+
+### Algorithmes 3D : Backface culling
+
+Is suffit de déterminer l'orientation de la face par rapport à l'axe optique.
+
+Il suffit de faire un produit scalaire entre la normal ede la face et l'axe optique.
+
+### Algorithmes 3D : BSP
+
+Comment déterminer les objets cachés (ou partiellement cachés) ?
+* Utilisation d'un arbre **Binary Space Partitionning Tree**
+    * Chaque noeud représente un hyperplan (déduit d'une face F)
+    * Le premier fils contient les faces du demi-espace derrière F et le second fils contient les faces du demi-espace devant F.
+    * Lorsque l'hyperplan intersecte une face, la face est coupée en deux
+
+### Algorithmes 3D: Z-buffer
+
+Comment déterminer les objets cachés (ou partiellement cachées) ?
+* Sauvegarder la profondeur pour chaque pixel dessiné
+* Simple à programmer
+* Inconvénients: 
+    * Oblige à projeter l'ensemble des polygones
+    * Problème de résolution lors de l'encodage du Z
