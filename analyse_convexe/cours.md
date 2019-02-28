@@ -1,681 +1,588 @@
-# Introduction au traitement du signal
+---
+title: "ACPM"
+date: "20-2-2019"
+link: "https://hackmd.io/_VubzVxiQP2u-x8S7qEUAQ?both"
+tags: SCIA, IMAGE, cours
+---
 
-Retour sur le cours de math du signal de l'année d'ing1. (RIP: Siarry)
-Comme vous allez voir, il y a deux facettes à ce cours. il y a un volet assez thérorique, scolaire (on va essayer de démystifier la transformée de fourrier), ainsi qu'une séries d'exemples un peu simplistes, concrets, avec lesquels on va jouer.
-
-**[Support de cours](http://www.lrde.epita.fr/~gtochon/MASI/)**
-
-## Introduciton 
-
-### Qu'est ce qu'un signal ?
-
-
-> Ce sont des **phénoménes physiques** mesurable par un capteur, transportant de l'information dans l'*espace* et le *temps*.
-
-Exemple :
-* C'est une fonction
-* Une onde (électromagnétique / lumière)
-* Courant / tension
-* Pression / température
+[Bashar's Github](https://github.com/bashardudin/Epita-SCIA-OCVX)
 
 
 :::info
-Nous faisons la distinction entre continu et discret.
+bashar.dudin@epita.fr
+guillaume.tochon@lrde.epita.fr
 :::
 
-**Signal analogique** :
-> Dépend continuellement de ses variables.
+À voir :
+* [Descente de gradient](https://www.youtube.com/watch?v=IHZwWFHWa-w)
 
-**Signal numérique** :
-> Un signal discret est capturé par un capteur, il devient numérique.
+# Analyse convexe et programmation mathématique
 
-Le traitement du signal est né durant la seconde guerre mondiale. Un de ses pères fondateur est Claude Shannon. Il a fondé d'un point de vue mathematique la theorie du signal.
-ex: un téléphone utilise continuellement des algo de traitement de signal.
+## Introduction
 
-:::info
-Si l'on s'arrête aux images, (classe restreinte) on peut voir des application medicales, militaires, etc...
-:::
+En rentrant dans l'ère industrielle, il a fallu optimiser les coûts, minimiser les risques, etc.
+Des mathematiciens ont commencé à se poser des questions.
+ex: gestion d'un stock, optimiser la construction de produits en usine.
 
-**Question :** Pourquoi le son est échantilloné 44.1kHz ?
+* Algebre linéaire
+* Calcul différentielle
+* Géometrie
 
-> Théorème de shannon: il faut que le signal soit echantillonné à une fréquence deux fois plus importante que la fréquence maximale cible (l'oreille humaine entend jusqu'a 20kHz, donc on échantillonne le son à 44kHz).
+> Examples:
+> 1. Chercher le plus cours chemnin entre deux coordonnées GPS.
+> 2. Décider des meilleurs routes aériennes qui minimisment le prix d'approvisionnement en kérosène.
+> 3. Identifier des images d'IRM qui correspondent à des malformations du cerveau.
+> 4. Chercher des patterns dans la population d'étudiants intégrants EPITA.
 
-### Comment fonctionne une oreille ?
+### Problèmes d'optimisation
 
-**[Explication ouïe e-penser <3](https://www.youtube.com/watch?v=i2bKuw011nk)**
+#### Définition formelle
 
-![Schéma Oreille](https://img-3.journaldesfemmes.fr/ecwoCOyevynOUsgpS0zIox4TF5Q=/427x/smart/1f2336d93ec144d8b53c976108f57ea8/ccmcms-jdf/1155604.jpg)
+Minimiser $f_0(x)$
+sujet à :
+* $f_i(x) \leq 0, \forall i \in \{1,\dots,p\}$
+* $h_j(x) \leq 0, \forall j \in \{1,\dots,m\}$
 
+où $f_0$, les $f_i$ et les $h_i$ sont des applications de $\mathbb{R}^n$ vers $\mathbb{R}$. La fonction $f_0$ est dite **fonction objetif**; suivant le contexte ce sera une fonction de **coût** ou d'**erreur**.
 
-Les vibration mécanique du son sont transformer en impulsion electrique par la cochlée. En fonction de la fréquence de l'onde des cellules cillié différentes vont être activé.
+Un proble d'optimisatio du type de $(P)$ :
+* **différentiable** si toute les fonctions en jeu le sont.
+* **non-contraint** s'il n'a aucune contraintes d'inégalités ou d'égalités.
+* **convexe** si l'ensemble des fonctions en jeu sont convexes, les contraintes d'égalités étant de plus affines.
+
+#### Lexique
+
+Étant donnée un problème d'optimisation $(P)$ on appelle:
+* **point admissible** de $(P)$ tout point de $\mathbb{R}^n$ satisfaisant toutes les contraintes. L'ensemble de tous les points admissibles est appelé **lieu admissible** de $(P)$.
+* **valeur objectif** d'un point admissible la valeur que prend la fonction objectif en celui-ci.
+* **valeur optimale** de $(P)$ la meilleure borne inférieure sur la fonction objectif.
+* **point optimale** de $(P)$ tout point admissible dont la valeur objectif est la valeur optimale.
+
+#### Premières remarques qualitatives
+
+* Y a-t-il au moins une solution ?
+* S'il y a au moins une soluton, combien ?
+* Peut-on toujours décrire l'ensemble des solutions?
+* Y a-t-il moyen d'approcher des solutions?
+
+### ML
+
+#### Map fitting
+
+Problème d'optimisation dit de *map fitting*
 
 :::success
-Donc l'oreille fait une transformée de fourier...
+**Définition :**
+Une famille différentiable d'applications $f_\alpha:\mathbb{R}^n\longmapsto\mathbb{R}$ indéxeś par $\alpha \in \mathbb{R}^k$ est une famille de fonctions pour laquelle l'application $\phi:\mathbb{R}^k\times\mathbb{R}^n\longmapsto\mathbb{R}$ qui envoie $(\alpha,x)$ sur $f_\alpha(x)$ est différentiable.
 :::
-
-
-
-## Signal
-
-La manière génerale de définir un signal, c'est 3 variables de position et 1 variable de temps, mais pour les besoins de ce cours, on ne travaillera qu'avec 1 seule dimension spaciale.
-
-**Signal :**
-> Fonction dépendant d'une seule variable de temps $t$ (avec $t \in \mathbb{R}$)
-
-On mesure une certaine quantite unidimensionnelle a valeur dans $\mathbb{R}$ ou $\mathbb{C}$
 
 :::info
-Rappel sur les complexes:
-$|z|^2 = z * \bar{z}$
+**Map Fitting :**
+On considère une ensemble de couples $(X_i, y_i)\in\mathbb{R}^n\times\mathbb{R}$ pour $i \in \{ 1,...,p \}$ et une famille differentiable d'applications $\{ f_\alpha \}_{\alpha\in\mathbb{R}^k}$. Le problème de *map fitting* relatif aux données précédentes consiste à trouver les meilleurs paramètres $\alpha^*$ tels que $f_{\alpha^*}$ approche au mieux les $(X_i, y_i)$. 
 :::
 
+#### Régression linéaire
 
-Le signal est un module borné. 
+Le plus simple des problèmes de *map fitting* est celui de la régression linéaire.
+
+* La famille différentiable à laquelle on s'intéresse est indexés par $\mathbb{R}^2$: $f_\alpha(x)=\alpha_1x+\alpha_0$ pour $\alpha=(\alpha_0,\alpha_1)$
+* La métrique standard utilisée est le **MSE** (Mean Square Error) donnée pour un $f_\alpha$ par
+$$\mathcal{E}(\alpha)=\sum_{i=1}^p\frac{1}{p}(f_\alpha (X_j)-y_i)^2$$
+
+Le but est de trouver un paramètre $\alpha = (\alpha_0,\alpha_1)$ tel que $\mathscr{E}(\alpha)$ est minimal, autrement dit de réoudre le problème d'optimisation sans contraintes
+
+### Contour du cours
+
+* La première partie est noté par un TD et un partiel
+* La seconde partie est noté par une analyse à faire (projet?)
+
+## Classification
+
+> Comment séparer la classe1 de la classe2 ?
+> 
+> ![Classification Schéma](https://www.researchgate.net/profile/Ammar_Chouchane/publication/303899174/figure/fig18/AS:614128192323590@1523430979027/Classification-SVM-a-SVM-lineaire-separation-par-une-ligne-droite-b-SVM-non.png)
+>
+> On fait un trait...
+
+
+### Produit scalaire
+
+$x = \begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix} \qquad y = \begin{pmatrix}y_1 \\ \vdots \\ y_n\end{pmatrix}$
+
+$\begin{align}
+\langle:\rangle : ~ & \mathbb{R}^n\longmapsto \mathbb{R}\\
+                 & (x,y) \longmapsto \langle x,y \rangle
+\end{align}$
+
+$\langle x,y \rangle =\displaystyle\sum_{i=1}^{n}x_iy_i$
+
+$||x|| =\sqrt{\langle x,x \rangle}$
+
+On veut :
+* $x_1, x_2$ en fonction de $||x||$ et $\phi$
+* $y_1, y_2$ en fonction de $||y||$ et $\psi$
+
+
+* $x_1 = ||x|| \cos{\phi} \qquad x_2 = ||x|| \sin{\phi}$
+* $y_1 = ||y|| \cos{\psi} \qquad y_2 = ||y|| \sin{\psi}$
+
+* $\langle \vec{x}, \vec{y}\rangle = x_1 y_1 + x_2 y_2 = ||x||.||y||.(\underbrace{\cos{\phi}\cos{\psi} + \sin{\phi}\sin{\psi}}_{\cos{(\psi - \phi)} = \cos{\theta}}) =||x||.||y||.\cos{\theta}$ 
+
 :::info
-$\bar{\mathbb{R}} = \mathbb{R} \cup \{+\infty; -\infty\}$
+**En dimension n :**
+$$\theta(x,y)=arccos\left(\frac{\langle x,y \rangle}{||x||.||y||}\right)$$
 :::
 
-
-On va autoriser potentiellement des discontinuites.
-x est continu ou possède un nombre fini / indénombrable de discontinuités.
-
-Si $x_1$ signal et $x_2$ signal et $\lambda \in \mathbb{R}/\mathbb{C}$ alors $x_1 + x_2$ est un signal.
-
-C'est un espace vectoriel.
-
-En pratique dans cet espace vectoriel on va pouvoir definir:
-* une base
-* un produit scalaire
-* une norme 
-
-### Fonctionnement du radar
-
-> Une onde se propage puis va buter contre un obstacle et refléchi un signal vers l'émeteur.
-
-L'operation qui mesure la ressemblance entre 2 element est le produit scalaire. 
-
-## Produit scalaire
-
-$$
-    x = \begin{pmatrix}x_1\\x_2\end{pmatrix}\\
-    y = \begin{pmatrix}y_1\\y_2\end{pmatrix} \\
-    \langle x,y \rangle = x_1 \times y_1 + x_2 \times y_2 = ||x|| . ||y||.cos(\theta) = \sqrt{x_1^2 + x_2^2}
-$$
-
-Si $x,y \in\mathbb{R}^n$ c'est pareil.
-
-$$
-    x = \begin{pmatrix}x_1\\\vdots\\x_n\end{pmatrix}\\
-    y = \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} \\
-    \langle x,y\rangle  = x_1 \times y_1 + ... + x_n \times y_n = \sum_{i=1}^nx_i y_i = x^Ty=(x-x_n)\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix}
-$$
-
-Si $x,y \in\mathbb{C}^n$.
-
-Produit hermitien (équivalent complexe du produit scalaire):
 :::info
-$\langle x, y  \rangle$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$ 
-:::
-
-
-**Définition:** Soit $E$ un espace vectoriel sur $\mathbb{R}$
-
-> $$
+**Formules usuelles trigonometriques :**
 \begin{align}
-    \langle :\rangle  : &  E \times E \rightarrow \mathbb{R} \\
-          & (x, y) \rightarrow \langle x,y\rangle 
+\sin \left(s+t\right)=\sin \left(s\right)\cos \left(t\right)+\cos \left(s\right)\sin \left(t\right)\\
+\sin \left(s-t\right)=\sin \left(s\right)\cos \left(t\right)-\cos \left(s\right)\sin \left(t\right)\\
+\cos \left(s+t\right)=\cos \left(s\right)\cos \left(t\right)-\sin \left(s\right)\sin \left(t\right)\\
+\cos \left(s-t\right)=\cos \left(s\right)\cos \left(t\right)+\sin \left(s\right)\sin \left(t\right)\\
+\cos \left(s\right)\cos \left(t\right)=\frac{\cos \left(s-t\right)+\cos \left(s+t\right)}{2}\\
+\sin \left(s\right)\sin \left(t\right)=\frac{\cos \left(s-t\right)-\cos \left(s+t\right)}{2}\\
+\sin \left(s\right)\cos \left(t\right)=\frac{\sin \left(s+t\right)+\sin \left(s-t\right)}{2}\\
+\cos \left(s\right)\sin \left(t\right)=\frac{\sin \left(s+t\right)-\sin \left(s-t\right)}{2}\\
 \end{align}
-$$
-
-
-1) Symetrie $$\forall x,y \in E : \langle x,y\rangle  = \langle y,x\rangle $$
-2) Bilinearite $\forall x,x_2, y \in \mathbb{E} \langle x,y\rangle  = \langle y,x \rangle + \lambda \langle x_2,y \rangle$
-3) Positivité: $\forall x \in E, \langle x,x\rangle  \geq 0$
-4) Définition: $\langle x,x\rangle =0 \Longleftrightarrow x=0_E$
-
-Si produit hermitien
-
-* Symétrie hermitienne: $\langle x,y \rangle = \bar{ \langle y,x \rangle}$
-* Semilinéarité: $$\langle x_1+\lambda x_2,y \rangle= \langle x_1,y \rangle + \lambda \langle x_2, y \rangle\\
-                   \langle x,y_1 + \lambda y_2 \rangle = \langle x,y_1 \rangle + \lambda \langle x,y_2 \rangle$$
-
-
-Norme sur E : $$\begin{align}
-                    ||.|| : & E \rightarrow \mathbb{R}^+ \\
-                            & x \rightarrow ||x||
-                \end{align}$$
-
-1) Séparation : $||x|| = 0 \leftrightarrow x = 0_E$
-
-
-
-2) Homogeneite $\forall \lambda \in  R / C  || \lambda x = |\lambda||. ||x||$
-3) Inégalité triangulaire: $\forall x,y \in E ||x+y|| \leq ||x|| + ||y||$
-
-
-On peut définir une norme à partir d'un produit scalaire: $||x|| = \sqrt{\langle x,x\rangle}$
-
-Inégalité de Cauchy Schwarz: $|\langle x,y \rangle| \leq ||x||.||y||$
-
-On peut définir une distance à partir d'une norme : 
-$$d(x,y)=\sqrt{\langle x-y,x-y \rangle}$$
-
-
-On veut définir un produit scalaire entre signaux / fonctions
-
-
-$$\langle x,y \rangle=x^Ty = \sum_{i=1}^nx_iy_i\\
-\begin{pmatrix}x_1\\\vdots\\x_n\end{pmatrix} \in \mathbb{R}^n$$
-
-Avec des éléments continus, $\sum$ va devenir $\int$
-
-Une fonction $x : I \rightarrow R / C$ est integrable sur $I$ ssi $\int_I x(t) dt \langle +\infty$
-
-* $\mathcal{L}^1(I) =$ espace des fonctions intégrables sur $I$
-* $\mathcal{L}^P(I) =$ espace des fonctions p-intégrables sur $I$
-
-Si $I=\mathbb{R}$ et $p=2$ $\mathcal{L}^2(\mathbb{R})=$ espace des fonctions de carré intégrable
-
-Ensemble des signaux d'énergie finie :
-$x \in \mathcal{L}^2(\mathbb{R}) \Longleftrightarrow \int_\mathbb{R} |x(t)|^2 dt \langle +\infty$ (energie du signal)
-
-
-Dans $\mathcal{L}^2 , \langle x,y \rangle = \int_{\mathbb{R}} x(t) \bar{y(t)}$ 
-
-
-Si $x, y$ à valeurs réelle $$\langle x,y \rangle=\int_\mathbb{R}x(t) y(t) dt\\
-E_x = \int_\mathbb{R}|x(t)|^2dt = \int_{\mathbb{R}}x(t)\overline{x(t)}dt=\langle x,x \rangle||x||^2=E_x$$
-:::info
-Définition de la fonction d'inter corrélation entre $x_{ref}$ et $y$
-
-$$ \Gamma_{x_{ref}y}(\tau) ~ =  ~ \langle x_{ref}(t),y(t-\tau)\rangle ~ = ~ \int{_\mathbb{R}x_{ref}(t)\overline{y(t-\tau)} dt}$$
-
-$y(t-\tau)  = y(t)$ retardé d'un facteur $\tau$
-$y_\tau(t)  = y(t-\tau)$
-$y_\tau(0)  = y(-\tau) \Longleftrightarrow y(0)=y_\tau(\tau)$
-
 :::
- 
- 
+
+On peut représenter une droite avec :
+* 2 points
+* 1 point et un vecteur directeur ou normal.
+
+$x=\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} \in D \Leftrightarrow \langle \vec{Ox},\vec{n} \rangle = 0 \Leftrightarrow \underbrace{x^{T}n=0}_{\langle x,n \rangle}$
+$\rightarrow$ Equation d'un hyperplan de vecteur normal $\vec{n}$
+
+Soit une droite $ax_1 +bx_2 + c = 0$ :
+* Son **vecteur normal** : $\vec{n} = \begin{pmatrix}a\\b\end{pmatrix}$
+* Son **vecteur directeur** : $\vec{u} = \begin{pmatrix}-b\\a\end{pmatrix}$
 
 
+> **Exercice :**
+> Dessiner le lieu de $\mathbb{R}^2$ donné par la relation
+> $$\begin{pmatrix}
+> 1 & 2 \\
+> -1 & 1
+> \end{pmatrix}
+> \begin{pmatrix}
+>  x_1\\x_2
+> \end{pmatrix} \leq \begin{pmatrix}0\\0\end{pmatrix}$$
+>
+> $x_1 + 2x_2 \leq 0$
+> $-x_1 + x_2 \leq 0$
+> 
+> On remplace l'inégalité par une égalité :
+> $x_1 + 2x_2 = 0 \qquad \vec{n_1} = \begin{pmatrix}1\\2\end{pmatrix} \qquad \vec{u_1} = \begin{pmatrix}-2\\1\end{pmatrix}$
+> $-x_1 + x_2 = 0 \qquad \vec{n_2} = \begin{pmatrix}-1\\1\end{pmatrix} \qquad \vec{u_2} = \begin{pmatrix}-1\\-1\end{pmatrix}$
+>
+> On a les vecteurs normaux on peut donc représenter graphiquement le lieu.
+> ![](https://i.imgur.com/M8Y0xkz.png)
 
-### Autocorrélation de x :
 
-$$x \in \mathcal{L}^2 (\mathbb{R}), \Gamma_{xx}(\tau) ~ = ~ \langle x(t), x(t - \tau)\rangle = \int_{\mathbb{R}}x(t) \overline{x(t - \tau)} dt$$
+> **Exercice :**
+> Trouver le lieu de $\mathbb{R}^3$ tq $\underbrace{x_1 + x_2 + x_3}_{(1 1 1)\begin{pmatrix}x1\\x_2\\x_3\end{pmatrix}} \geq 0$
+> 
+> $\vec{n} = \begin{pmatrix}1\\1\\1\end{pmatrix}$
+> $\langle n, x \rangle \geq 0$
+>
+> ![](https://i.imgur.com/kcXCXJE.png)
 
 
-* 1^er^ propriété 
-  * $\Gamma_{xx}$ est maximale pour $\tau=0$
-  * $\Gamma_{xx}(0) = \langle x(t),x(t)\rangle = \int_\mathbb{R}(x(t)^2)dt = ||x||^2 = \bar{\tau}_x$ car $\sqrt{ \langle x(t),x(t)\rangle} = ||x||$
+### Espace affine
+
+$A = {(1,t) \in \mathbb{R}^2 | t \in \mathbb{R}} = (1, 0) + \underbrace{\{(0,t) \in \mathbb{R}^2 | t \in \mathbb{R}\}}_{F}$
+
+:::info
+On note qu'on pouvait utiliser un autre point $(1,42)$ au lieu de $(1,0)$ donne le même résultat.
+:::
 
 
-* 2^éme^ propriété
-    * $\Gamma_{xx}(\tau) = \overline{\Gamma_{xx}(\tau)}$ symetrie hermitienne
-    * Si x est à valeurs réelles : $\Gamma_{xx}(- \tau) = \Gamma(\tau)$ : l'autocorrélation est paire
+$P=\{(t, 3t + u, -u) \setminus (t, u) \in \mathbb{R}^2\}$
+* $O \in P$
+* $A = \begin{pmatrix}1\\3\\0\end{pmatrix} \in P$
+* $B = \begin{pmatrix}0\\1\\-1\end{pmatrix} \in P$
+$\vec{n} = \vec{OA} \times \vec{OB}$
 
-* 3^éme^ propriété
-    * $\forall \tau \in \mathbb{R}, |\Gamma_{xx}(\tau)| \leq \Gamma_{xx}(0)$
+:::info
+**Produit vectoriel :** [Wikipédia](https://fr.wikiversity.org/wiki/Produit_vectoriel/Avanc%C3%A9)
+:::
 
-* Si $x$ est T-périodique : $x(t - \tau) = x(t)$
-  $\Gamma_{xx}(T)  = \langle x(t), x(t - \tau) \rangle ~ = ~ \langle x(t),x(t)\rangle ~ = ~ \Gamma_{xx}(0)$
-  $\Gamma_{xx}$ est périodique
+> **Exercice :**
+> Ecrire **paramétriquement** la droite $D$ de $\mathbb{R}^2$ de vecteur directeur $\vec{u}=\begin{pmatrix}1\\-1\end{pmatrix}$ et passant par $(2,3)$
+>
+> Soit $M \in D \Leftrightarrow \exists ~\alpha \in \mathbb{R}$ tq 
+> $$\vec{AM} = \alpha \vec{u} \\ 
+> \Leftrightarrow \begin{pmatrix}x_1 - 2\\ x_2 - 3\end{pmatrix} = \alpha \begin{pmatrix}1\\-1\end{pmatrix}\\
+> \Leftrightarrow \begin{cases} x_1 -2 = \alpha \\ x_2 - 3 = -\alpha\end{cases} \\
+> \Leftrightarrow \begin{cases}x_1 = \alpha + 2\\x_2 = 3 - \alpha\end{cases}$$
+>
+> Donc $(D) = \{(\alpha +2, 3-\alpha) | \alpha \in \mathbb{R}\}$
 
+> **Exercice :**
+> Dessiner le lien de $\mathbb{R}^2$ decrit par les contraintes :
+> $\begin{pmatrix}-1 & 2 \\
+> 1 & 1\\ 
+> \end{pmatrix} = \begin{pmatrix}x \\ y  \end{pmatrix} \le \begin{pmatrix} -1 \\ 1\end{pmatrix}$
+> $ax + by = 0$
+> $ax + by +c = 0$
+> $\overrightarrow{n} \begin{pmatrix}a \\ b  \end{pmatrix} \overrightarrow{u} \begin{pmatrix}-b \\ a  \end{pmatrix}$
+> $\{ (x,y) \in \mathbb{R}^2 , -x + 2y \le -1 \text{ et } x+y \le 1 \}$
+> $(D_1) = -x + 2y + 1 = 0$
+> $(0, \frac{-1}{2} \in D_1)$
+> $\overrightarrow{n_1} = \begin{pmatrix} -1 \\ 2\end{pmatrix}$
+> $\overrightarrow{u_1} = \begin{pmatrix} -2 \\ -1\end{pmatrix}$
 
 ---
 
-### Intercorrélation
-
-> On va peu faire d'autocorrélation, on va travailler avec de l'**intercorrélation**.
-> Au lieu de comparer la ressemblance entre x et x retardé, on va comparer x et y.
-
-Intercorrelation de 2 signaux $x, y \in \mathcal{L}^2(\mathbb{R})$, $y(t)=x(t-t_0)$ :
-
-\begin{align}
-\Gamma_{xy}(\tau) &= \langle x(t), y(t-\tau)\rangle = \int_\mathbb{R}x(\tau)\overline{y(t-\tau)}dt\\
-&= \langle x(t), y(t-\tau)\rangle \\
-&= \langle x(t),x((t-t_0)-\tau)\rangle\\
-&= \underbrace{\langle x(t), x(t-(t_0 + \tau))\rangle}_{\Gamma_{xx}(t_0-\tau)}
-\end{align}
-
-
-
-\begin{align}O_x \Gamma_{xx}\text{ est maximale en } & 0 = t_0 + \tau  \\
-& \tau = - t_0\end{align}
-
-
-:::success
-Donc $\Gamma_{xy}$ est maximale en $- t_0$
-:::	
-
-$$y(t) = x(t) + \eta(t) \thicksim \mathcal{N}(0,\sigma^2)$$
-
-\begin{align}
-\Gamma_{xy}(\tau) &= \langle x(t), y(t - \tau) \rangle \\
-&=\langle x(t), x(t-\tau) + \eta_\sigma (t - \tau) \rangle \\
-&= \langle x(t), x(t-\tau) \rangle +  \langle x(t), \eta_\sigma (t - \tau) \rangle\\
-&=\Gamma_{xx}(\tau)\\
-&=E[X \eta_\sigma] = E[X] E[\eta_\sigma] = 0
-\end{align}
-
-
-Si $x$ et $y$ sont 2 variables independantes alors $E[xy] = E[x] E[y]$
-
-## Convolution
-
-> C'est l'opération mathématique derriere tous les filtrages.[name=Tochon]
-
-Soit $f,g \in \mathcal{L}^1(\mathbb{R})$.
-
-On appelle produit de la convolution de $f$ et de $g$ l'opération :
-$$(f * g)(t) = \int^{+\infty}_{-\infty}f(x)g(t-x)dx
-= \int^{+\infty}_{-\infty} g(x)f(t -x)dx
-$$
-
-> La convolution c'est "juste" une moyenne pondérée glissante généralisée [name=Tochon]
-
-#### Propriétés :
-
-1) Existence du produit de convolution :
-  Pour que $x * y$ existe, il suffit que $x,y \in \mathcal{L}'(\mathbb{R})$
-  Auquel cas, $(x * y) \in  \mathcal{L}^1(\mathbb{R})$
-  Rappel: $x \in \mathcal{L}'(\mathbb{R}) \Leftrightarrow \int_\mathbb{R}|x(t)|dt < + \infty$
-
-2) Le produit de convolution est commutatif : $(x * y) = (y * x)$
-3) Le produit de convolution est bilinéaire : $x * (y + \lambda z) = (x*y) + \lambda (x * z)$
-4) Le produit de convolution est associatif : $(x*y)*z = x*(y*z)$
-5) Le produit de convolution admet un élement neutre. Le delta de Dirac :
-$$\delta : t \rightarrow 
+$\underbrace{Ax = r}_{\text{écriture implicite}} \qquad \text{ avec } \begin{cases}\text{A matrice } m \times n\\A = [a_{i,j}]_{mn}\\x \in \mathbb R^n ~ r \in \mathbb R^m \end{cases}$
 \begin{cases}
-    0 ~ \forall t \neq 0 \\ 
-    +\infty t = 0 
-\end{cases} \\
-\int_\mathbb{R} \delta(t)dt = 1
-$$
+a_{11} x_1 + a_{12} x_2 + \dots + a_{1n}xn = r_1\\
+\vdots \\
+a_{m1}x_1 + a_{m2}x_2 + \dots + a_{mn}x_n = r_m
+\end{cases}
 
-:::success
-$\mathcal{L}^1(\mathbb{R})$ munit du produit de convolution forme donc un monoïde commutatif.
+:::info
+**Hyperplan**: Un plan de dimension $n-1$.
+Exemples: En 2D, c'est une droite. En 3D, c'est un plan...
 :::
 
-#### Symetrie :
+Notre description affine ne suffit pas dans le cas général.
 
-Si $x$ et $y$ sont des signaux soit pairs soit impairs. $(x * y)$ est  paire ssi $x$ et $y$ sont de même parite.
+:::info
+**Description d'un cercle :**
+$x^2 + y^2 = r^2\\
+x^2+y^2-r^2=0$
+$\boxed{f(x,y) = x^2 + y^2 - r^2}$
+:::
 
-$(x*y)$ est impaire ssi $x$ et $y$ sont de parité opposés.
+:::info
+**Ligne / Courbe de niveau d'une fonction f:**
+$$\mathscr{C}_r=\{x\in \mathbb{R}^n | f(x)=r\}$$
 
-#### Dérivée:
+**Lieu de sous niveau e d'une fonction f:**
+$$\mathscr{C}_{\leqslant r}=\{ x\ \in \mathbb{R}^n \ f(x) \leqslant r \}$$
+:::
 
-Si $x, y  \in \mathcal{L}'(\mathbb{R})$ et sont derivables avec $x',y' \in \mathcal{L}'(\mathbb{R})$
+:::info
+Les **coniques :** C'est les paraboles, hyperboles, elipse...
+:::
 
-$(x*y)'=x'*y=x*y'$
+> **Exercice :**
+> Courbes de niveau 0,1,2
+> 1. $f(x,y)=x^2+y^2$
+    > $\mathscr{C}_0$: seul $(0,0)$
+    > $\mathscr{C}_1$: cercle de rayon 1 centré en 0
+    > $\mathscr{C}_2$: cercle de rayon 2 centré en 0
+    > 2. $g(x,y)=x^2+4y^2$
+    > $\mathscr{C}_0$: seul $(0,0)$    
+    > $\mathscr{C}_1$: ellipse demigrand axe 1, demipetit axe $\frac{1}{2}$, centré en 0
+    > $\mathscr{C}_2$: ellipse demigrand axe $\sqrt{2}$, demipetit axe $\frac{\sqrt{2}}{2}$, centré en 0
+>
+> ![schema cercle](https://i.imgur.com/pJCjNKt.gif)
 
-#### Fonction porte
+:::info
+**Équation d'une éllipse**
+$$\bigg(\frac xa\bigg)^2 + \bigg(\frac yb\bigg)^2=1$$
+![](https://i.imgur.com/4I9Oq2K.gif)
+**a :** demi-grand axe
+**b :** demi-petit axe
+:::
 
-$\Pi_T(t)=\begin{cases}1 ~\forall t\in [-\frac{T}{2}; \frac{T}{2}] \\ 0 ~ \text{sinon}\end{cases}$
+:::info
+Epigraphe d'une fonction $f.\mathbb R^n \rightarrow \mathbb R$
 
-![Représentation fonction porte](https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Dfqwz-iTOmojUspk9cLrJwHaFH%26pid%3D15.1&f=1) 
+$Epi(f) = \{(x,t) ~|~ f(x) \leq t\}$
 
-[Elle est fausse, la notre vaut 1 aux bornes. TODO]
+![Représentation épigraphe](https://i.stack.imgur.com/y98sx.png)
+:::
+
+> **Exercice :**
+> Dessiner l'intersection de l'épigraphe de $f(x)=-\sqrt{x}$ (sur $\mathbb R^+$)
+> avec la partie $\{(x, y) | y \leq \sqrt x\}$
+> ![](https://i.imgur.com/0R5DgRj.png)
+
+:::success
+Une partie de $A\subset \mathbb{R}^n$ est **convexe** ssi $\forall x,y\in A, \forall t\in [0,1]$ alors $$tx+(1-t)y \in A$$
+:::
+
+:::info
+**L'adhérence** d'une partie est sa frontiere.
+$A \cup \partial{A}  = \underbrace{\bar{A}}_{adhérence}$
+:::
+
+> **Exemple :**
+> $A = [1,2[$
+> $\partial A = \{\{1\} \{2\}\}$
+> $\bar A = [1,2]$
 
 
-\begin{align}
-(\Pi_{T} * \Pi_{T} )(t) &= \int_{\mathbb{R}} \underbrace{\Pi_{T}(x)}_{0 \text{ si } x \notin [-\frac{T}{2};\frac{T}{2}]} \Pi_{T}(t -x)dx \\
-                        &= \int_{-\frac{T}{2}}^{\frac{T}{2}}\Pi_T(t-x)dx
-\end{align}
+> Quoi ? Hyper parapluie ??? [name=multun]
 
-* Pas de chevauchement $\Leftrightarrow |t| > T$ 
-* Chevauchement max $t = 0$
+:::info
+Un **hyperplan d'appui** d'une partie $A$ est un hyperplan de $A$ qui posséde un élément du bord de $A$
+![Schema hyperplan d'appui](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLLg3Yp48CLVcKGuwVXIXZ8GxKMd8DJ58WHYSagPY4qjq5SX9Sag)
+:::
 
-$$(\Pi_T * \Pi_T)(0)=\int_{-\frac{T}{2}}^{\frac{T}{2}} 1 dx = T$$
+:::info
+Une **fonction convexe** admet des hyperplans d'appui en chacun des points de sa frontière.
+:::
 
-* Si $0 < t < T$
+:::info
+$f$ **convexe** $\Leftrightarrow f(tx+(1-t)y) \leq tf(x)+ (1-t)f(y)$
+:::
 
-$$(\Pi_T * \Pi_T)(t)=\int_{t-\frac{T}{2}}^{\frac{T}{2}}dx = \frac{T}{2} - (t - \frac{T}{2}) = T - t$$
 
-* Si $-T < t < 0$
-$(\Pi_{T} * \Pi_{T})(t) = \int_{\frac{-T}{2}}^{t + \frac{T}{2}}dx = t+ \frac{T}{2} +\frac{T}{2}$
+Exemple de fonctions convexes
+* $f(x) = ax^2 +bx +c , a \ge 0$
+* $f(x) = bx+ c$
+* $e^{ax} \quad \forall a$
+* $f(x) = -\log(x)$
+* $f(x) = \sqrt(x)$
+* $f(x) = |x|$
+* $f(x) = x^{2p}, p \in \mathbb{N}^*$
+
+> **Exercice :**
+> Est ce que la somme de fonctions convexes est convexe ?
+> 
+> $f = \sum_{i=1}^{N}w_if_i$ la somme de fonctions convexes
+>
+> $$\begin{align}
+> f(tx + (1-tg)) &= \sum_{i=1}^N f_i (tx+(1-t)y) \\
+>                &\leq tf_i(x)+(1-t)f_i(y) \\
+>                &\leq \sum_{i=1}^N w_i(tf_i(x)+(1-t)f_i(y)) \\
+>                &\leq \sum_{i=1}^N tw_if_i(x) + \sum_{i=1}^N(1-t)w_if_i(y) \\
+>                &\leq t\underbrace{\sum_{i=1}^N w_if_i(x)}_{f(x)} + (1-t) \underbrace{\sum_{i=1}^N w_if_i(y)}_{f(y)}
+> \end{align}$$
+> Donc c'est bien convexe !
+
+
+Soit $f(x,y) = x^2 + y^2$
+La fonction [Hessienne](https://fr.wikipedia.org/wiki/Matrice_hessienne) de $f$:
+$$H(x,y) = \begin{pmatrix}\frac{\partial^2f(x,y)}{\partial x^2}
+&\frac{\partial^2f(x,y)}{\partial y \, \partial x} \\ 
+\frac{\partial^2f(x,y)}{\partial y \, \partial x}
+& \frac{\partial^2f(x,y)}{\partial y^2}
+\end{pmatrix} $$
+
+
+## Programme linéaire
+
+> **Exercice 1:**
+> 
+> $\mathcal A_u : \begin{cases}
+> -x+2y \leq 1\\
+> x + y \leq 1
+> \end{cases}$
+> 
+> $\mathcal A_b = \mathcal A_u \cup \{(x,y) \in \mathbb R^2, x-3y \leq 6\}$
+> 
+> * $(D_1)$: $-x + 2y + 1 = 0 \qquad (0, -\frac 12) \in (D_1) \qquad \vec{n_1}\begin{pmatrix}-1\\2\end{pmatrix} \qquad \vec{u_1}\begin{pmatrix}-2\\-1\end{pmatrix}$
+> 
+> * $(D_2)$: $x + y  - 1 = 0 \qquad (0,1) \in (D_2) \qquad \overrightarrow{n_2}\begin{pmatrix} 1 \\ 1\end{pmatrix}\qquad \overrightarrow{u_2}\begin{pmatrix} -1 \\ 1\end{pmatrix}$
+> 
+> * $(D_3)$: $x - 3y  - 6 = 0 \qquad (0,-2) \in (D_3) \qquad \overrightarrow{n_3}\begin{pmatrix} 1 \\ -3\end{pmatrix}\qquad \overrightarrow{u_3}\begin{pmatrix} 3 \\ 1\end{pmatrix}$
+> 
+> $\underbrace{\min f_0(x,y) = y = -\infty}_{(x,y) \in \mathcal{A}_u}$
+> $\underbrace{\min f_0(x,y) = -y = 0}_{(x,y) \in \mathcal{A}_u}$
+
+
+> **Exercice 2:**
+>
+> $f(x,y) = 3x^2 + y^2$
+> $\mathcal{C}_2(f)\mathcal{C}_4(f)$?
+> $\mathcal{C}_{\le 4}(f)$?
+> $\min f_0(x,y) = 2x + y$
+> sujet à $3x^2 +y^2 \le 4$
+> 
+> \begin{align}
+> \mathcal{C}_2(f) : &  3x^2 + y^2 = 2 \\
+> \Leftrightarrow &\frac{3}{2}x^2 \frac{1}{2}y^2  = 1\\
+> \Leftrightarrow &\begin{pmatrix}\frac{x}{\frac{\sqrt{2}}{\sqrt{3}}}\end{pmatrix}^2 + \begin{pmatrix}\frac{y}{\sqrt{2}}\end{pmatrix}^2\\
+> \end{align}
+> 
+> \begin{align}
+> \mathcal{C}_4(f) : &  3x^2 + y^2 = 4 \\
+> \Leftrightarrow &\frac{3}{4}x^2 \frac{1}{4}y^2  = 1\\
+> \Leftrightarrow &\begin{pmatrix}\frac{x}{\frac{2}{\sqrt{3}}}\end{pmatrix}^2 + \begin{pmatrix}\frac{y}{2}\end{pmatrix}^2\\
+> \end{align}
+> 
+> \begin{align}
+> \mathcal{C}_0(f_0) : &  2x + y = 0 \\
+> & (0,0) \in \mathcal{C}_0(f_0)\\
+> & \overrightarrow{n}\begin{pmatrix} 2\\ 1\end{pmatrix} \overrightarrow{u}\begin{pmatrix} -1\\ 2\end{pmatrix}
+> \end{align}
+> 
+> $\min(f_0(xy)) = f_0^*$ pour $(x,y) = (x^*,y^*)$
+> $3x^{*2} +y^{*2} = 4$ $(x^*,y^*) \in \mathcal{C}_4(f)$
+> $2x^{*} + y^* = f_0^*$ $(x^*,y^*) \in \mathcal{C}_{f_0^*}(f_0)$
+> 
+> :::info
+> \begin{align}
+> \Delta f(x^*, y^*) = \begin{pmatrix} 6x^* \\ 2y^*\end{pmatrix}\\
+> \langle \Delta f(x^*,y^*), \overrightarrow{u} \rangle = 0\\
+> \begin{pmatrix} 6x^* & 2y^* \end{pmatrix} \begin{pmatrix} -1 \\ 2 \end{pmatrix} = 0 
+> \end{align}
+> :::
+> 
+> \begin{align}
+> 3x^{*2} + y^{*2} &= 4\\
+> -6x^* + 4y^* &= 0 \rightarrow y^* &= \frac{6}{4} x^*\\
+> & & = \frac{3}{2}x^*\\
+> & &= \frac{6}{\sqrt{21}}
+> \end{align}
+> $y^* = \frac{6}{\sqrt{21}}$
+> 
+> $3x^{*2} + (\frac{3}{2}x^{*})^2 = 4$
+> $3x^{*2}  + \frac{9}{4}x^{*2} = 4$
+> $\frac{21}{4}x^{*2} = 4$
+> $x^{*2} = \frac{16}{21}$
+> $x^* = \frac{4}{\sqrt{21}}$ ou $-\frac{4}{\sqrt{21}}$
+> ![](https://i.imgur.com/MfE89nI.jpg)
+> 
+
+## Géometrie différentielle pour les petits
+
+Avec ce qu'on a vu à ce jour on peut chercher à résoudre un problème d'optimisation de la forme suivante
+$$
+\begin{aligned}
+\text{min}\qquad & \overbrace{-x_1-2x_2}^{f_o(x_1,x_2)} \\
+\text{sujet à} \qquad &x_1+x_2 \leqslant 5 \\
+& -2x_1+x_2 \leqslant 3 \\
+& x_1, x_2 \geqslant 0
+\end{aligned}
+$$
+
+![](https://i.imgur.com/y2TapSp.png)
+> Sur la rouge non plus, cf (0.5, 1)
+> Tu dépasse a gauche
+
+$\color{red}{\text{Le lieu admissible}}$
+$\color{green}{\mathscr{C}_0}:$ Courbe de niveau de $f_0$ passant par $(0,0)$
+
+Afin d'améliorer la valeur objectif du point courant, on cherche un point à la fois dans le lieu admissible et dans le demi-espace, qu'on determine à partir de l'équation de la fonction objectif.
+
+La courbe de niveau de la fonction objectif au point optimal isole le lieu admissible dans la partie + des demi-espaces defini par la  courbe de niveau de la fonction objectif en ce point. le demi-espace est un hyperplan d'appui au lieu admissible.
+
+---
+> **Exercice :**
+>
+> $$
+> \begin{aligned}
+> \text{min}\qquad & x+y \\
+> \text{sujet à} \qquad &x^2+y^2 \leqslant 1
+> \end{aligned}
+> $$
+> Comment trouver les hyperplans d'appui au lieu admissible?
+> 
+> ![](https://i.imgur.com/MbGpHe5.png)
+> point optimal en $(\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}})$
+> je propose
+> ![](https://i.imgur.com/AIZviNO.png)
+> $\color{blue}{\text{Point optimal B}}$
+
+
+
+Quand on cherche à minimiser une fonction objectif affine contrainte par un lieu admissible qui est une ellipse de $\mathbb R^2$, on se retrouve à rechercher des hyperplans d'appui de celui-ci .
+Cette notion nous ramene à l'étude des dérivées de fonction numériques dont les graphes décrivent des morceaux du bord  du lieu admissible. Pour généraliser cette approche, on a besoin de généraliser la notion de dérivée sur plusieurs variables.
+
+### Normes sur $\mathbb R^2$
+
+Une norme sur $\mathbb R-ev$ est une manière de mesurer la longueur d'un vecteur, tout en préservant un minimum la structure d'ev. Elle permet en particulier de mesurer la distance entre deux points pour la longueur du vecteur qui les relie.
+
+:::success
+**Définition :**
+Une norme sur $\mathbb R^n$ est une application $||\cdot||: \mathbb{R}^n \longmapsto \mathbb{R}$ telle que
+
+1) $||x|| = 0 \Longleftrightarrow x = 0$
+2) $\forall \lambda \in \mathbb R , \forall x \in \mathbb R^n: ||\lambda x|| = |\lambda|\cdot||x|| \qquad \quad$ (relation d'homogéinité)
+3) $\forall x, y \in \mathbb{R}^n$, $||x+y||\leqslant ||x|| + ||y|| \qquad \qquad$ (inégalité triangulaire)
+:::
+
+> **Exercice :** sur $\mathbb R^n$
+> 
+> 1. $||x||_1 = \displaystyle\sum_{i=1}^{n}|x_i|$
+> 2. $||x||_2 = \bigg(\displaystyle\sum_{i=1}^{n}(x_i)^2\bigg)^{\frac 1 2}=\sqrt{x^Tx}$
+> 3. $||x||_\infty = \underset{i\in \{1,\dots,n\}}{\max}\{|x_i|\}$
+> 4. Pour $p \geqslant 1$,
+    > $||x||_p = \bigg(\displaystyle\sum_{i=1}^{n}|x_i|^p\bigg)^{\frac 1 p} \qquad \qquad$ (la norme p)
+
+À partir d'une norme sur $\mathbb R^n$, on va pouvoir définir :
+
+1. Une distance : $\forall x, y \in \mathbb R^n, d(x, y) = ||x-y||$
+
+![](https://i.imgur.com/IqsTRki.png)
+
+2. Une notion de voisinage d'un point
+
+    Quand on fait de l'analyse, on s'intéresse à ce qui se passe autour d'un point donné     $\epsilon$-près. Par example, pour montrer qu'une suite numérique $(u_n)_{n\in \mathbb{N}}$ converge vers $l\in \mathbb{R}$, on vérifie:
+    $$\forall \epsilon > 0, \exists N \in \mathbb{N}, n \ge N \Longrightarrow \underbrace{|u_n - l| < \epsilon}_{u_n\in ] l-\epsilon, l+\epsilon [}$$
+   
+
+La notion de norme sur $\mathbb R^n$ permet de généraliser cette notion à toute dimension. Par exemple si $(u_n)_{n \in \mathbb{N}}$ une suite à valeurs dans $\mathbb R^n$ et $l = (l_1, .., l_n) \in \mathbb{R}^n$.
+On dit que (u_n) converge vers l au sens de la norme $||.||$ si :
+$$(E) \qquad \forall \epsilon > 0, \exists N \in \mathbb{N}, n \ge N \Longrightarrow |u_n - l| < \epsilon$$
+
+On note
+$\begin{aligned}B_{||\cdot||}(l,\epsilon)=\{x\in \mathbb{R}^n | ||x-l||<\epsilon\} \\ \bar{B}_{||\cdot||}(l,\epsilon)=\{x\in \mathbb{R}^n | ||x-l||<\epsilon\} \end{aligned}$
+
+
+Dans ce cas, $(E)$ s'écrit : 
+$$\forall \epsilon > 0, \exists N \in \mathbb N , b \ge N \Rightarrow \mathcal U_n \in B_{||.||}(l,\epsilon)$$
+
+Dans le cas de $\mathbb R^2$ on represente $\overline{B_{||\cdot||}}(\underbrace{\underline{0}}_{\text{l'origine}},1)$
+
+![](https://i.imgur.com/vxTQU9I.png)
+![](https://i.imgur.com/WB5lwF8.png)
+
+
 
 :::warning
-Ca été donné au partiel de MASI des Ing1. Donc ca sera potentiellement à notre partiel.
+Remarque: les boules d'une norme sont convexes.
+du coup, les boules de Noel aussi #loul
 :::
 
-
-
-$$\Gamma_{xy}(\tau) = \langle x(t), y(t-\tau)\rangle = \int_\mathbb{R}x(\tau)\overline{y(t-\tau)}dt\\
-(x * y)(\tau) = \int_\mathbb{R}x(t)y(t-\tau)dt\\
-y^-(t)=y(-t)$$
-\begin{align}
-(x*y^-)(\tau) &= \int_\mathbb{R}x(t)y^-(\tau - t)dt\\
-              &= \int_\mathbb{R}x(t)y(t - \tau)dt\\
-\end{align}
-
-$$(x*\bar{y})(\tau)=\int_\mathbb{R}x(x(t)\overline{y^-(\tau - t)}dt) = \int_\mathbb{R}x(t)\overline{y(t - \tau)}dt=\Gamma_{xy}(\tau)
-$$
-
-:::success
-$$\Gamma_{xy}  = (x * \overline{y^{-}})$$
-:::
-
-:::info
-**Convolution filtrage :** opération mathématique produit de convolution
-**Corrélation :** motif dans un signal
-:::
-
-> On ne peut pas faire pire qu'un cours de Siarry [name=Tochon]
-
-## Série de Fourier
-
-:::info
-Né au milieu du 18ème siecle, doit son nom à Fourier pour résoudre une équation de la chaleur (comment la chaleur se propage dans une barre)
-Travaux début 1800, les premiers résultats mathématiques sont en 1830.
-:::
-
-Un phénomene vibratoire peut se séparer en superposition de phénomène vibratoire.
-> Exemple: la lumière blanche qui se décompose en beaucoup de longueurs d'ondes différentes.
-
-
-### Principe de superposition:
-
-> Décomposition d'un phenomene vibratoire complexe en une superpostion de phénomènes vibratoires simples.
-
-* Sytème vibratoire complexe: Signal périodique de periode T.
-* Systeme vibratoire simple: Onde sinusoidale $A \sin(2\pi ft + \phi)$
-
-$\sin(x) \rightarrow \text{periode } 2 \pi$
-
-![Sinus function](https://www.mathsisfun.com/algebra/images/sine-graph.svg)
-
-Calcul de période:
-* $\sin(\frac{2\pi}{T}x) \Rightarrow T$
-* $\sin(2\pi\frac{n}{T}x) \Rightarrow \frac{T}{n}$
-* $\sin(2\pi x) \Rightarrow 1$
-* $\sin(x) \Rightarrow 2\pi$
-
-$$\begin{align}
-x(t) &= \sum^{N}_{n=1} A_n \sin(2\pi\frac{n}{T}t + \phi_n) \\
-     &= A_1 \sin(\underbrace{\frac{2\pi}{T}}_{\text{fréquence fondamentale } f = \frac{1}{T}} t+d_1) + \dots + A_N \sin(2\pi \frac{N}{T}t + \phi_N)
-\end{align}$$
-
-:::info
-**Notations :**
-* $w = \frac{2\pi}{T} =$ pulsation
-* $f =$ fréquence
-* $T = \frac{1}{f} =$ période
-:::
----
-
-:::info
-**Rappels :**
-$\sin(a + b) = \sin a \cos b + \cos a \sin b$
-$\cos(a + b) = \cos a \cos b - \sin a \sin b$
-:::
-
-\begin{align}
-x(t) &= a_0 + \sum^{N}_{n = 1} A_n[\sin(2 \pi \frac{n}{T} t) \cos(\phi_n) + \cos(2 \pi \frac{n}{T} t) \sin (\phi_n)]\\
-&= a_0 + \sum^{N}_{n = 1} A_n \sin(\phi_n) \cos(2 \pi \frac{n}{T} t) + A_n \cos(\phi_n) \sin(2 \pi \frac{n}{T} t) \\
-&= a_0 + \sum^{N}_{n = 1}a_n  \cos(2  \pi \frac{n}{T}  t) + b_n  \sin(2  \pi  \frac{n}{T}  t )
-\end{align}
-
-
-#### Decomposition des termes
-
-$$S_n = \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T} t) + b \sin(2\pi \frac{n}{T} t)$$
-
-$S_1 = a_1 \cos(2\pi \frac{1}{T} t)$
-$S_2 = a_1 \cos(2\pi \frac{1}{T} t) + a_2 \cos(2\pi \frac{2}{T} t)$
-
----
-
-
-$x(t) = a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2 \pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
-
-> Comment déterminer ces coefficients : $a_0, \{a_n, b_n\}_{n \geq 1}$ ?
-
-#### Lemme #1
-
-Soit x une fonction T-périodique
-
-\begin{align}
-\int_0^T x(t)dt &= \int_a^{a + T} x(t)dt ~ \forall a \\
-                &= \int_{-\frac{T}{2}}^{\frac{T}{2}} x(t)dt
-\end{align}
-
-
-#### Lemme #2
-
-$$\int_{0}^{T} \cos(2\pi \frac{n}{T} t) \cos(2\pi \frac{k}{T}t)dt =
-\int_{-\frac{T}{2}}^{\frac{T}{2}} \cos(2\pi \frac{n}{T} t) \cos(2\pi \frac{k}{T}t)dt =
-\begin{cases}0 ~ n\neq k\\\frac{T}{2} ~ n = k\end{cases}$$
-
-#### Lemme #3
-$$\int_{0}^{T} \sin(2\pi \frac{n}{T} t) \sin(2\pi \frac{k}{T}t)dt =
-\int_{-\frac{T}{2}}^{\frac{T}{2}} \sin(2\pi \frac{n}{T} t) \sin(2\pi \frac{k}{T}t)dt =
-\begin{cases}0 ~ n\neq k\\\frac{T}{2} ~ n = k\end{cases}$$
-
-:::info
-**Rappel :**
-$\cos a \cos b = \frac{1}{2} (\cos (a+b) + \cos(a - b))$
-:::
-
-
-#### Preuve du lemme #2
-
-* Si $n \neq k$ :
-$$
-\int_{0}^{2\pi} \cos(nt) * \cos(kt) dt =  \int_{0}^{2 * \pi} 1 / 2 * (\cos(n + k)t) + \cos((n - t)t) dt\\ 
-\frac{1}{2} \int_0^{2\pi} \cos((n + k)t)dt + \frac{1}{2} \int_0^{2\pi} \cos((n - k)t)dt \\
-= \frac{1}{2} [\frac{1}{n +k} \sin((n + k)t)]_{0}^{2\pi} + \frac{1}{2}[\frac{1}{n - k} \sin ((n - k)t)]_0^{2\pi}\\ 
-= \frac{1}{2} \frac{1}{n+k}(\underbrace{\sin((n+k)2\pi)}_{=0} - \underbrace{\sin((n+k)0)}_{=0} + \dots = 0
-$$
-
-* Si $n = k$ :
-$$
-\cos^2(a)=\frac{1+\cos(2a)}{2} \\
-\int_0^{2\pi}\cos^2(nt)dtA \\
-= \int_0^{2\pi}\frac{1+cos(2nt)}{2}dt
-= \int_0^{2\pi}\frac{1}{2}dt + \int_0^{2\pi}\frac{cos(2nt)}{2}dt \\
-= \frac{1}{2}\int_0^{2\pi}cos(2nt)dt
-= \frac{1}{2}[\frac{1}{2n}\sin(2nt)]^{2\pi}_0 = 0
-$$
-
-
-#### Lemme #4
-
-$$
-\int_{0}^{T} (\cos(2\pi * \frac{n}{T} t) * sin(2\pi * \frac{k}{T}t)  dt))
-$$
-
-
-On suppose toujours que $x(t) = a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi\frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
-
-$a_0$: On integre entre $0$ et $T$
-
-
-\begin{align}
-\int_0^T x(t) dt &= \int_0^T [a_0 \cos(2\pi \frac{n}{T}t) + b_n \sin (2\pi \frac{n}{T})]dt\\
-                  &= \int_0^T + \sum_{n = 1}^{+\infty} \int_0^T a_n cos(2\pi \frac{n}{T}) dt )\\
-                  &= T a_0 + \sum^{+\infty}_{n=1}a_n\underbrace{\int_0^T\cos(2\pi \frac{n}{T}t)dt}_{=0} + \sum_{n=1}^{+\infty}b_n \underbrace{\int_0^T\sin(2\pi\frac{n}{T}t)dt}_{=0}
-\end{align}
-
-
-$a_0 = \frac{1}{T} \int_0^T x(t)dt \equiv$ valeur moyenne de $x$ sur une periode  
-
----
-
-$\{a_n: n \geq 1\}$: On cherche $a_k$, $\forall k \in \mathbb{N}^*$
-
-
-On multiplie par $\cos (2\pi \frac{k}{T}t)$ l'egalite puis on integre entre 0 et T.
-
-\begin{align}
-x(t)cos(2\pi \frac{k}{T}t) &= a_0 \cos(2\pi \frac{k}{T}t) + \sum_{n+1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) \cos(2\pi \frac{k}{T}t) + b_n \sin(2\pi \frac{n}{T}t) \cos(2\pi \frac{k}{T}t)\\
-\end{align}
-
-
-
-
-\begin{align}
-\int_0^T x(t) cos(2\pi t\frac{k}{T}) dt &= a_0 \int_0^T cos(2\pi tk/T) dt \\
-                                        &\underbrace{+ \sum_{n=1}^{+\infty}a_n + \int_{n = 1}{+\infty}\sin(2n * \frac{n}{T})\cos(2n \frac{k}{T}t) dt}_{\text{tous les termes sont nuls sauf le $k^{ième}$, qui vaut $a_k \frac{T}{2}$}}\\
-                                        = a_k \times \frac{T}{2}
-\end{align}
-
-
-
-$a_n = \frac{2}{T} \int_0^T x(t) \cos(2\pi \frac{n}{T}t)dt \: \forall n \ge 1$
-Et $b_n = \frac{2}{T} \int_0^T x(t) \sin(2\pi \frac{n}{T}t)dt \: \forall n \ge 1$
-
-### Fonction continue par morceaux sur un intervalle $[a,b]$
-
-$x \in \mathcal{C}_{pm}^o ([a,b])$ si $x$ est continue sur $[a,b]$, sauf a un certain nombre de points de discontinuité $a_i$, tq $x(a_i)=\lim_{t \rightarrow a;\\t < a;} x(t)$
-
-
-et $x(a_i^+) = \lim_{t \rightarrow a;\\ t > a;}  x(t)$ mais potentiellement $x(a_i) \neq x(a_i^-) \neq x(a_i^+)$
-
-![fonction discontinue](https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F0%2F0e%2FFonction_discontinue.png&f=1)
-
-Fonction dérivable par morceaux $(\mathcal{C}^1_{pm})$ sur $[a,b]$
-* $x$ dérivable sur $[a,b]$ sauf éventuellement en un certain nombre de points pour lesquels il est possible de définir des limites à gauche et à droite de la derivée.
-
-
-#### Théoreme de Dirichlet
-
-Soit un signal T-périodique et $\mathcal{C}^1_{pm}$. Alors en tout point de continuité de $x$, on a :
-$\displaystyle x(t) = a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
-
-Si $x$ discontinue en $t_0$:
-$$
-a_0 + \sum^{+\infty}_{n=0}a_n \cos(2\pi \frac{n}{T}t_0) + b_n \sin(2\pi \frac{n}{T}t_0) = \frac{1}{2}(x(t_0^-) + x(t_0^+))\\
-$$
-avec
-\begin{align}
-a_0 &= \frac{1}{T} \int_0^Tx(t)dt\\
-a_n &= \frac{2}{T} \int_{0}^T x(t) \cos(2 \pi \frac{n}{T}t)dt\\
-b_n &= \frac{2}{T} \int_{0}^T x(t) \sin(2 \pi \frac{n}{T}t)dt\\
-\end{align}
-
-### Transformee de Fourier
-
-$$
-\underbrace{x(t)}_{\text{periode } T} \underbrace{=}_{\text{*cf dessous} } a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)
-$$
-
-$\text{*}$ theoreme de Dirichlet: x doit etre $\mathcal{C}^1$ par morceau a tout point de continuité de x. Si discontinuen t_0, alors la Serie de Fourier converge vers $\frac{1}{2} (x(t_0^-) + x(t_0^+))$
-
-$$
-a_0 = \frac{1}{T} \int_0^{T}x(t)dt\\
-a_n = \frac{2}{T}\int^T_0 x(t) \cos(2\pi \frac{n}{T}t)dt , n \ge 1\\
-b_n = \frac{2}{T} \int^T_0 x(t) sin(2\pi \frac{n}{T}t)dt , n \ge 1 \\
-$$
-
-
-> **Exercice:**
-> Calculer les coeficient de la série de fourier du signal en crénaux.
-> ![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Signal_creneau_symetrique.svg/1200px-Signal_creneau_symetrique.svg.png)
-> signal centre en $\frac{1}{2}$ et avec Ym = 1 et -Ym = 0
-> 
-> * $a_0 = \frac 1T \int_0^T x(t)dt = \frac 1T \int_0^{\frac T2}dt = \frac 12$
-> * $a_n = \frac 2T \int_0^T x(t)\cos(2\pi \frac nTt)=\frac 2T \int_0^{\frac T2}\cos(2\pi \frac nT t)dt\\ = \frac 2T \frac{T}{2\pi n}[\sin(2\pi \frac nTt)]^\frac T2_0 = \frac{1}{t /n}(\sin(tn)-sin(0))=0 \qquad\forall n \geq 1$
-> * $b_n = \frac 2T \int_0^T x(t)\sin(2\pi \frac nT t)dt = \frac 2T \int_0^{\frac T2}\sin(2\pi \frac nTt)dt\\=-\frac 2T \frac{T}{2\pi n}[\cos(2 \pi \frac nTt)]_0^{\frac T2} = - \frac{1}{\pi n}(\cos(n\pi)-\cos(0))=\frac{1}{\pi n}(1-\cos(n\pi))$
-> $b_n = \frac{1}{\pi n}(1-(-1)^n)=\begin{cases}0 \text{ si n pair}\\ \frac{2}{\pi n}\text{ si n impair}\end{cases}$
+Comme on a peu le voir pour la cas de la convergence d'une suite se donner une norme sur $\mathbb{R}^n$ va nous permettre de transposer les notons de continuité d'une fonction ou de comparaison de fonctions en un point $(o, O, \text{~} )$
+
+> **Exercice :**
+> On se donne une norme $||.||$ sur$\mathbb R^n$.
+> continuite): Soit $f:(E, ||.||_E)\rightarrow (F, ||.||_F)$
+> on dit que f est continue en $a \in E$ si 
+> * $f$ est défini au voisinage de $a$ 
+> $$
+> \forall \epsilon > 0, \exists \mu > 0 tq
+> ||x-a|| < \mu \Rightarrow ||f(x) - f(a)|| < \epsilon
+> $$
 >
->\begin{align}
-> x(t)&= a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)\\
-> &=\frac{1}{2} + \sum_{\underbrace{n = 1}_{n \text{ impair } \rightarrow  n = 2k +1}}^{+\infty} b_n \sin(2\pi \frac{n}{T}t)\\
-> &= \frac{1}{2} + \sum^{+\infty}_{k = 0} b_{2k + 1} \sin(2 \pi \frac{(2k + 1)}{T} t)\\
-> & =\frac{1}{2} + \sum^{+\infty}_{k = 0} \frac{2}{\pi(2k + 1)} \sin(2\pi \frac{2k+1}{T}t)\text{ en tout point de continuite de x}.
-> \end{align}
-> Et en $\frac T2$ ?
-> * $x(\frac T2) = 1$
-> * $x(\frac{T^t}2) = 0$
-> * $\sin(2 \pi (\frac{2k+1}{T})\frac T2)= \sin((2k+1)\pi) = \sin(2k\pi + \pi) = \sin(2k\pi + pi) = \sin(\pi) = 0$
+> $(\theta)$ Une fonction f est un $\theta_1(g)$ en a $\in$ E s'il existe $\epsilon$ :(E,$||\cdot||_E$) $\rightarrow \mathbb R$ telle que
+> * $f=\epsilon g$
+> * $\epsilon \xrightarrow[a]{} 0$
+> 
+> Quand g n'est pas identiquement nulle au voisinage de a, la condition précédente est équivalente à $\frac{||f||_F}{||g||_F} \xrightarrow[a]{} 0$
 
-$S_N (A) = a_0 + \sum_{n = 1}^{N} a_n \cos(2\pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
-$x \text{discontinu en }t_0$
-$|\Delta x(t_0)|$ hauteur de la discontonuite:
-hauteur du sursaut $\rightarrow  \approx 0.09 |\Delta x(t_0)|$
-
-
-:::info
-On a les coefficients on va doucement se rapprocher de la série de fourier.
-:::
-
-
-On va admettre que l'ecriture $x(t)= a_0 + \sum_{n = 1}^{+\infty} a_n \cos(2\pi \frac{n}{T}t) + b_n \sin(2\pi \frac{n}{T}t)$
-est équivalente à $x(t)=\sum_{n=-\infty}^{+\infty}C_ne^{i2\pi\frac nTt}$
-avec $C_n = \frac 1T \int_0^T x(t)e^{-i2\pi \frac nTt}dt$
-
-:::info
-$e^{i\theta} = \cos \theta + i\sin \theta \rightarrow \boxed{e^{i\pi}+1 = 0}$ est stylé car il y a toute les maths
-$\cos \theta = \frac{e^{i\theta}+e^{-i\theta}}{2}$
-$\sin \theta = \frac{e^{i\theta}-e^{-i\theta}}{2i}$
-:::
-
-Si x est pair $\rightarrow b_n = 0 \forall n \ge 1$
-Si x est impair $\rightarrow a_n = 0 \forall n \ge 1$
-
-
-$\{|a_n|, n \in \mathbb{Z}\}$ : spectre du signal
-Si le signal est à valeurs réelles $(x(t) \in \mathbb{R})$
-$C_{-n} = \overline{C_n} \rightarrow |C_{-n}| = |C_n|$
-On peut etudier uniquement les $C_n$ pour n $\ge$ 0
-
-$$\forall n \ge 1 \begin{cases} a_n  = C_n + C_{-n}\\
-b_n  = i(C_n - C_{-n})\end{cases}
-\Leftrightarrow
-\begin{cases} C_n  = \frac{1}{2} (a_n - ib_n)\\
-C_{-n}  = \frac{1}{2} (a_n + ib_n)\end{cases}
-$$
-
-:::info
-Soit $u = \{u_1, \dots, u_n\}$ une base de $\mathbb R^n$ et <;> un produit scalaire sur $\mathbb R^n$
-$u$ est une base orthonormée de $\mathbb R^n$ ssi \begin{cases}\langle u_i, u_j \rangle = 0 \quad i \neq j\\ ||u_i|| = 1\end{cases}
-:::
-
-
-cas en 2 dimensions
-$$
-\overrightarrow{x} = x_1 \overrightarrow{u_1} + x_2 \overrightarrow{u_2}\\
-= \langle \overrightarrow{x_1}, \overrightarrow{u_1} \rangle \overrightarrow{u_1} + \langle \overrightarrow{x_1}, \overrightarrow{u_2} \rangle \overrightarrow{u_2}\\
-\langle \overrightarrow{x}, \overrightarrow{u_1} \rangle = \langle \begin{pmatrix} x_1 \\ x_2\end{pmatrix} \begin{pmatrix} 1 \\ 0\end{pmatrix}  \rangle = x_1
-x_1 =\langle \overrightarrow{x_1}, \overrightarrow{u_1} \rangle = \text{projection de} \overrightarrow{x} \text{ sur l'axe des engendre par } \overrightarrow{u_1}
-$$
-
-$$
-\overrightarrow{x} = \begin{pmatrix} x_1 \\ ... \\ ... \\ x_n\end{pmatrix} \text{ dans } u\\
-\overrightarrow{x} = \sum_{i = 1}^{n} x_i \overrightarrow{u_i} \quad , x_i = \langle \overrightarrow{x_i} , \overrightarrow{u_i} \rangle\\
-$$
+Il semble à ce stade que la définition de continuité ou celle de convergence dépende de la norme choisie.
 
 :::success
-$\overrightarrow{x} = \sum_{i = 1}^n \langle \overrightarrow{x} , \overrightarrow{u_i} \rangle \overrightarrow{u_i}$
+**Définition :**
+Les normes $||\cdot||_\alpha$ et $||\cdot||_\beta$ sur $\mathbb{R}^n$ sont dites équivalentes s'il existe $c, C \in \mathbb{R}_+^*$ telle que
+$$\forall x \in \mathbb{R}^n, c||x||_\alpha \leqslant ||x||_\beta \leqslant C||x||_\alpha$$
+Si 2 normes sont équivalentes alors elles définissent les mêmes fonctions continues, les mêmes o, $\theta$, ~ ou encore les mêmes suites convergentes.
 :::
 
-Need help
-
-$x(t) = \sum^{+\infty}_{n = -\infty} a_n e^{i2\pi\frac{n}{T}t}$
-$C_n = \frac{1}{T} \int_0^T x(t) e^{-i2\pi \frac{n}{T}t}dt$
-
-$\langle x(t), y(t) \rangle = \frac{1}{T} \int_0^T x(t) \overline{y(t)} dt$
-$\langle x(t), y(t) \rangle = \int_{\mathbb{R}} x(t) \overline{y(t)} dt$
-On va admettre que $\{ U_n : t \rightarrow e^{i2\pi\frac{n}{T}t, n \in \mathbb{Z}}\}$ forme une base de $\mathcal{L}^2([0,T])$ et on va verifier qu'elle est orthonormee pour $\langle : \rangle$ 
+:::info
+**Théorème :**
+Sur $\mathbb R^n$ toutes les normes sont équivalentes.
+:::
 
 
 
 
-\begin{align}
-<u_n(t), u_m(t)> &= \frac{1}{T} \int_0^T  u_n(t) \overline{u_m(t)} dt \\
-&= \frac{1}{T} \int_0^T e^{i2\pi \frac{n}{T} t} \overline{e^{i2\pi \frac{m}{T} t}} dt \\
-&= \frac{1}{T} \int_0^T e^{i2\pi \frac{n - m}{T} t} dt \\
-&= \frac{1}{T} \int_0^T e^{i2\pi \frac{k}{T} t} dt\\
-&= \frac{1}{T} \frac{T}{2k\pi} [e^{i2\pi \frac{k}{T} t}]_0^T\\
-&= \frac{T}{2ik\pi} (e^{i2k\pi} e^0) = 0
-\end{align}
 
 
-$\langle x,x \rangle = ||x||^2$
-$\langle u_n(t) , u_n(t) \rangle = \frac{1}{T} \int_0^T u_n(t)$ VOIR PHOTO DESSOUS
 
-![](https://i.imgur.com/VLNVY4D.jpg)
+
+
+
 
 
 
