@@ -269,3 +269,101 @@ Choix en fonction de criteres:
 :::info
 Ne pas oublier de passer dans un referentiel exponentiel pour effectuer le changement de valeur des composantes des pixels. L'oeil humain est sensible logarithmiquement.
 :::
+
+Lorsqu'on calcule le redimensionnement/ la rotation d'une image, on cherche les antecedents dans l'image d'arrivée. 
+Les ecrans à tube cathodique, n'avaient pas une intensité linéaire, cela est resté. Beaucoup de traitements en échelle linéaire sont donc faux.
+
+Usuellement quand on prend un appareil photo, on est en modele srgb.
+
+#### Le srgb. 
+
+* $R' = r/255 V' = v/255 B' = b /255$
+* $Rsrvb = [(R' + 0.055)/ 1.055]^2.4)$
+
+Si on ne tombe pas précisément sur un pixel alors :
+1) On prend le plus proche voisin ;
+2) On fait une moyenne pondéré (Intérpolation bilinéaire);
+3) On utilise 4 points et on calcul la dérivé (Interpolation bicubique)
+
+![Interpolation schema](https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Comparison_of_1D_and_2D_interpolation.svg/1200px-Comparison_of_1D_and_2D_interpolation.svg.png)
+
+#### Analyse globale de l'image histogramme
+
+L'histogramme contient de l'information utile pour connaitre immediatement le contraste et savoir si une image est trop sombre/claire.
+
+![Histogramme](https://hypjudy.github.io/images/dip/9_1_h.jpg)
+
+Pour ameliore une image plein de transformations sont possibles:
+* correction d'histogramme
+    * lineaire
+    * polynomiale
+
+On peut utiliser l'histogramme cumule, pour voir les pentes fortes.
+Avec un histogramme plat, on peut profiter de toutes les dynamiques. Cela revient à un histogramme cumulé linéaire.
+
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Unequalized_Hawkes_Bay_NZ.jpg/800px-Unequalized_Hawkes_Bay_NZ.jpg =x200) ![](https://upload.wikimedia.org/wikipedia/commons/4/4e/Unequalized_Histogram.svg =x200)
+
+![](https://upload.wikimedia.org/wikipedia/commons/b/bd/Equalized_Hawkes_Bay_NZ.jpg =x200) ![](https://upload.wikimedia.org/wikipedia/commons/3/34/Equalized_Histogram.svg =x200)
+
+
+Ameliorer la couleur plan par plan rend l'image corrigee fausse.
+LLa solution est de passer dans l'espace de couleur **hls/hsv** et de travailler sur la composante de luminance.
+
+### Diminution du nombre de couleurs :
+#### Algorithme Median Cut
+
+* Dans l'espace rgb on cherche des representants de couleur.
+* Ensuite on choisit une direction.
+* On coupe le cube en 2 en disant qu'on en veut autant avant que apres.
+* On reitere ainsi de suite.
+* Chaque sous cube a le meme nombre de pixel.
+* chaque sous cube de pixel va elire une couleur representante
+* Diffusion de l'erreur sur les pixels voisins pour compenser l'erreur locale à un pixel (voir slide 44/56 la différence entre l'image à 4 couleurs sans/avec diffusion d'erreurs)
+
+#### Binarisation (un peu plus hardcore)
+
+* Séparation fond / forme
+* Seules deux couleurs (!= nuances de gris)
+* Pose problème quand illumination non uniforme
+
+
+### Rappel : Espace fréquentiel (et transformee de Fourier)
+
+:::info
+**Cf :** 
+* [Page 71 pdf signal](http://jo.fabrizio.free.fr/teaching/ti/tifo_filtrage.pdf)
+* Cours de traitement du signal
+:::
+
+$g_n(t) \overline{g_n(t)} dt = \begin{cases}0 & \text{si } n \ne m\\1 & \text{si } n = m\end{cases}$
+
+Soit $f_n(t)=e^{2j\pi(\frac{nt}{T})}$
+Soit $C_n$ la n$^{eme}$ harmonique.
+Soit $\displaystyle F(t) = \sum_{n = -\infty}^{+\infty} C_nG_n(t)$
+
+\begin{align}
+f(t) &= C_0G_0(t) + C_1G_1(t) + C_2G_2(t)\\
+&= \frac{1}{T} (\int_T F(t) \overline{G_1(t)}dt)\\
+&=\frac{1}{T} (\int_T  C_0G_0(t) + C_1G_1(t) + C_2G_2(t))\overline{G_1(t)}dt\\
+&= \frac{1}{T} (\int_T  C_0G_0(t)\overline{G_1(t)}dt + \int_T C_1G_1(t)\overline{G_1(t)}dt + \int_T C_2G_2(t)\overline{G_1(t)}dt)\\
+&= \frac{1}{T} (0 + C_1 + 0)\\
+&= \frac{1}{T} C_1\\
+\end{align}
+
+
+* Basses fréquences : Peu de variation dans l'image (Ex: zone avec que du noir)
+* Haute fréquence : Variations rapides (Ex: contour d'un objet)
+
+#### Theoreme de Plancherel
+
+* Multiplier point a point dans l'espace spatial revient à convoluer dans l'espace frequentiel
+* Multiplier point a point dans l'espace frequentiel revient à convoluer dans l'espace spatial
+
+#### Revisite du filtrage
+
+
+On peut définir un filtre dans le domaine fréquentiel faire une transformé de fourier inverse pour l'avoir dans le domaine spatial puis appliquer une convolution.
+
+
+
