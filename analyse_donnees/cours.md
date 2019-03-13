@@ -339,8 +339,8 @@ E(XY) = -\frac 86 - \frac 14 + \frac 14 + \frac 86 = 0$$
 > $E(Y) = \frac{1}{2n} (\frac{n(n+1)}{2} + n)$
 > $E(Y) = \frac12 (\frac{n+1}{2} + 1)$
 > $E(Y) = \frac{n+3}{4}$
-> 
-> **Exercice**
+
+> **Exercice 3**
 > On dispose d'un dé équilibré à 6 faces
 > et d'une pièce truquée telle que la proba(pile) = $p \in ]0,1[$
 > Soit $N \in \mathbb N^{*}$ (fini). On effectue $N$ lancés de dé. Si $n$ est le nombre de six obtenu, on lance alors $n$ fois la pièce.
@@ -354,7 +354,8 @@ E(XY) = -\frac 86 - \frac 14 + \frac 14 + \frac 86 = 0$$
 > 2) $\forall k \in \mathbb{N}, \forall n \in \mathbb{N}$ determiner $\mathbb P(X=k|Z=n)$
 > 3) $\forall 0 \leq k \leq n < N$ calculer $\mathbb P((X=k) \cap (Z=n))$
 > 4) calculer $P(X) = 0$
-> 5) Montrer que $\forall 0 \leq k \leq n \leq \mathbb{N}$
+> 5) Montrer que $\forall 0 \leq k \leq n \leq \mathbb{N}$ FINIR L'ENONCE
+> Pour cette 5è question il s'agit de prouver une égalité de deux combinaisons de type k parmi n, cette égalité servira pour la question 6. Elle est facile à prouver car il suffit de développer LHS et RHS en utilisant la formule (k parmi n) = n!/k!(n-k)! puis de simplifier des deux côtés
 > 6) En déduire $P(X=k)$  
 >    Reconnaître la loi de $X$
 > 7) Loi de $Y$ ?
@@ -389,15 +390,142 @@ E(XY) = -\frac 86 - \frac 14 + \frac 14 + \frac 86 = 0$$
 > $\mathbb P(x=0) = \frac{1}{6^N} (6 - p)^N$
 > $\mathbb P(x=0) = (1 - \frac{p}{6})^N$
 > 
-> Formule de Binôme de Newton
+> :::info
+> **Formule de Binôme de Newton**
 > $(a + b)^N = \displaystyle\sum_{n=0}^{N} \binom{N}{n} a^n b^{N-n}$
+> :::
 > 
 > 5) $\binom{n}{k} \binom{N}{n} =? \binom{N}{k} \binom{N-k}{n-k}$
 > 
 > $\frac{n!}{k!(n-k)!} \frac{N!}{n!(N-n)!} = \frac{N!}{k!(N-k)!} \frac{(N-k)!}{(n-k)!(N-n)!}$
 > les deux expressions se simplifient en 
 > $\frac{N!}{k!(n-k)!(N-n)!}$
+> 
+> 6)$\mathbb P (X = k) = \binom N k \frac{p^k}{6^N} \displaystyle\sum^N_{n = k} \binom{N-k}{n-k} (1-p)^{n-k}5^{N-n}$
+> 
+> Posons $i = n - k$
+> $\mathcal P (X=k) = \binom{N}{k} \frac{p^k}{6^N} \displaystyle\sum^{N-k}_{i=0} \binom{N-k}{i} (1-p)^{i} 5^{N-k-i}$ 
+> $= \binom{N}{k} \frac{p^k}{6^N}(1-p+5)^{N-k} = \binom{N}{k} (\frac{p}{6})^k (1 - \frac{p}{6})^{N-k}$
+> $X \hookrightarrow \mathcal B(N, p/6)$
 >
+>7) Même raisonnement pour la loi de $Y$
+> $Y \hookrightarrow \mathcal B(N, q/6)$ où $q = 1 - p$
+> 
+> 8) $Cov(X,Y) = ?$
+> Rappel : Covariance d'une somme dans le cas general
+> $Var(Z) = Var(X + Y) = Var(X) + Var(Y) + 2Cov(X,Y)$
+>
+> $Z \hookrightarrow \mathcal B(N, 1/6)$
+> $X \hookrightarrow \mathcal B(N, p/6)$
+> $Y \hookrightarrow \mathcal B(N, q/6)$
+> 
+> :::info
+> $X \hookrightarrow \mathcal B(n, p)$
+> $E(X) = np$
+> $V(X) = npq = np(1-p)$
+> :::
+> $Cov(X,Y) = \frac12 (V(Z) - V(X) - V(Y))$
+> $Cov(X,Y) = \frac12 (\frac{5N}{36} - \frac{Np}{6}(1-\frac{p}{6}) - \frac{Nq}{6}(1-\frac{q}{6}))$
+> $Cov(X,Y) = \frac12 \times \frac{1}{36} (5N - NP(6-p) - Nq (6-q))$
+> $Cov(X,Y) = \frac12 \times \frac{1}{36} (5N - 6Np + Np^2 - 6Nq + Nq^2)$
+> $Cov(X,Y) = \frac 12  \times  \frac 1 {36} (5 N - 6Np +Np^2 -6N(1-p) + N(1 -2p + p^2))$
+> $Cov(X,Y) = \frac12 \times \frac{1}{36} (2Np^2 - 2Np)$
+> $Cov(X,Y) = \frac{1}{36} (Np(p - 1)) \ne 0 $ car $p \ne 0, p \ne 1$
+> $\Rightarrow X$ et $Y$ ne sont pas indépendants
+> 
+> 9) Loi du couple $(X,Y)$
+> $Z \in [[0,N]]$
+> $X = i$ et $Y =j$
+> $Z = i+j$
+> $\mathbb P ((X=i) \cap (Y = j)) = \mathbb P ((X=i) \cap (Z=i+j))$
+> $= \binom{n}{i} \binom{N}{i+j} p^{i} (1-p)^{n-i} (\frac56)^{N-(i+j)} (\frac16)^{i+j}$
+ 
+ ---
+ 
+**Exercice 4**
+
+> Une urne contient une boule blanche et une boule noire. On y prélève une boule, chaque boule ayant la même probabilité d'être tirée.
+> On note sa couleur et on la remet dans l'urne, avec $C$ boules de la même couleur de la boule tirée. On repète cette épreuve $n$ fois. ($n \ge 2$)
+>On définit:
+> $X_i = \begin{cases}\text{1 si on obtient une boule blanche au i}^{ème} tirage \\ 0 \text{ sinon} \end{cases}$
+>
+> $Z_p = \sum^p_{i=1} X_i$
+>
+> 1) Déterminer la loi du couple $(X_1,X_2)$ et en déduire la loi de $X_2$
+> 2) Déterminer la loi de $Z_2$
+> 3) Déterminer $\mathbb P(X_{p + 1} = 1 / Z_p = k)$
+> 4) Montrer que $\mathbb P(X_{p + 1} = 1) = \frac{1 + C \mathbb E(Z_p)}{2 +pc}$
+> 5) Montrer que $\forall p; 1 \le p \le n$
+>  $\mathbb P(X_p = 1) = \mathbb P(X_p = 0) = \frac 12$
+>  Récurrence sur p.
+ 
+> 1) $\mathbb P (X_1 = 1) = \mathbb P(X_1 = 0) = \frac12$
+> Donc $X_1  \hookrightarrow \mathcal B(p \frac 12)$ Bernoulli
+> $\mathbb P((X_1 = i)\cap (X_2 = k)) = \mathbb P(\frac {X_2 = k}{X_1 = i} \overbrace{\mathbb P(X_1 = i)}^{\frac12})$
+> 1^{er} cas $i \ne k$
+> $\mathbb P(\frac{X_2 = k}{X_1 = i}) = \frac{1}{2+C} \rightarrow \mathbb P((X_1=i) \cap (X_2=k)) = \frac{1}{2*(2+C)}$
+> 2^{ème} cas $i = k$
+> $\mathbb P(\frac{X_2=i}{x_1=i}) = \frac{1+C}{2+C}$
+> 
+> | $X_1 \backslash X_2$| 0                  | 1                  | Loi de X_1 |
+> | :---------:         | :------:           | :------:           | :--------: |
+> | 0                   | $\frac{1+C}{2(2+C)}$ | $\frac{1}{2(2+C)}$   | $\frac12$    |
+> | 1                   | $\frac{1}{2(2+C)}$   | $\frac{1+C}{2(2+C)}$ | $\frac12$    |
+> | Loi de X_2          | $\frac12$            | $\frac12$             | 1          |
+> $X_2 \hookrightarrow \mathcal B(p=\frac12)$
+> $2 \leq p \leq n$ et $Z_p = \sum^p_{i=1} X_i$
+> 
+> 2) $Z_2 = X_1 + X_2$
+> $Z_2(\omega) = \{ 0,1,2 \}$
+> $\mathbb P(Z_2 = 0) = \mathbb P((X_1=0) \cap (X_2 = 0)) = \frac{1+C}{2(2+C)}$
+> $\mathbb P(Z_2 = 1) = \mathbb P((X_1=1) \cap (X_2 = 0)) + \mathbb P((X_1=0) \cap (X_2 = 1)) = \frac{1}{2+C}$
+> $\mathbb P(Z_2 = 2) = \mathbb P((X_1=1) \cap (X_2 = 1)) = \frac{1+C}{2(2+C)}$
+>
+> 3) $\mathbb P ( \frac{X_{p +1} = 1}{Z_{p} = k} )$
+> $Z_p(\omega)=[[0,p]]$
+> $(Z_p=k) \Leftrightarrow$ au cours des $p$ tirages on a obtenu $k$ boules blanches et $(p-k)$ boules noires
+> au $(p +1)^{ième}$ tirage l'urne contient: $2 +pc$ boules dont $1 + kc$ boules blanches
+> Donc $\mathbb P(\frac{X_{p+1}=1}{Z_p=k}) = \frac{1+kc}{2+pc}$
+> 
+> 4) $\mathbb P(X_{p+1} = 1) ?$
+> $(X_{p + 1} = 1) = \displaystyle \bigcup_{k = 0}^p \underbrace{[(X_{p+1} = 1)\cap (Z_{p} = k)]}_{\text{événements incompatibles}}$
+> $\mathbb P(X_{p+1} = 1) = \displaystyle \sum^{p}_{k=0} \mathbb P((X_{p+1} = 1) \cap (Z_p=k))$
+> $\mathbb P(X_{p+1} = 1) = \displaystyle \sum^{p}_{k=0} \mathbb P(\frac{X_{p+1} = 1}{Z_p = k}) \mathbb P(Z_p=k)$
+> $= \displaystyle\sum^p_{k = 0} (\frac{1 + kc}{2 + pc} \mathbb P(Z_p = k))$
+> $= \frac{1}{2+pc} (\underbrace{\displaystyle \sum^{p}_{k=0} \mathbb P(Z_p=k)}_{=1} + c \underbrace{\displaystyle \sum^{p}_{k=0} k \mathbb P(Z_p=k)}_{E(Z_p)})$
+>
+> 5) Raisonnement par récurrence sur $p$
+> si $p = 1 , \mathbb P(X_i = 1) = \mathbb P(X_i = 0) = \frac 12 X_1 \hookrightarrow \mathcal B(\frac 12)$
+> $p = 2 ,\mathbb P(X_2 = 1) = \mathbb P (X_2 = 0) = \frac 12$
+> $X_2 \hookrightarrow \mathcal B(\frac 12)$ 
+> \underline{Hypothèse de récurrence}  Supposons que cette propriété reste vraie jusqu'au rang $p$
+> $Z_p = \displaystyle \sum^{p}_{i=1} X_i$
+> $E(Z_p) = \displaystyle \sum^{p}_{i=1} E(X_i) = \displaystyle \sum^{p}_{i=1} \frac12 = \frac{p}{2}$
+> $\Rightarrow \mathbb P(X_{p+1}=1) = \frac{1 + c p/2}{2 + pc} = \frac12 (\frac{2+pc}{2+pc}) = \frac12$
+> $\mathbb P(X_{p+1} = 0) = 1 - \frac12 = \frac12$
+>
+
+**Exercice 5**
+
+> $a \in \mathbb R$
+>  $X,Y$ 2 variables Aleat. à valeur dans $\mathbb N$
+> $\mathbb P((X=k)\cap(Y=j)) = \frac{a}{2^{k+1}j!}$
+> 1) Déterminer la constante $a$
+> 2) Déterminer les lois marginales de $X$ et $Y$
+> 3) Déterminer l'indépendance des variables $X$ et $Y$
+> 4) Calculer la covariance $Cov(X,Y)$
+
+> 1) Donc il faut que $a \leq 0$ et $\displaystyle \sum_{k=0,j=0} P_{kj} = 1$
+> 
+>
+>
+>
+>
+>
+>
+
+
+
 
 
 
