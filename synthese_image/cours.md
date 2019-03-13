@@ -307,21 +307,21 @@ Exemple de combinaison **projection et translation et rotation et scale** :
 >     1 & 0 & tx \\
 >     0 & 1 & ty \\
 >     0 & 0 & 1 
-> \end{pmatrix}
+> \end{pmatrix}^t
 > }^{\text{translation}}
 > \overbrace{
 > \begin{pmatrix}
 >     cos \theta & -sin \theta & 0 \\
 >     sin \theta & cos \theta & 0 \\
 >     0 & 0 & 1
-> \end{pmatrix}
+> \end{pmatrix}^t
 > }^{\text{rotation}}
 > \overbrace{
 > \begin{pmatrix}
 >     S_x & 0 & 0 \\
 >     0 & S_y & 0\\
 >     0 & 0 & 1
-> \end{pmatrix}
+> \end{pmatrix}^t
 > }^{\text{echelle}}
 > $$
 
@@ -645,3 +645,72 @@ Comment déterminer les objets cachés (ou partiellement cachées) ?
 * Inconvénients: 
     * Oblige à projeter l'ensemble des polygones
     * Problème de résolution lors de l'encodage du Z
+
+
+## Modélisation
+
+### Représentation d'un maillage
+
+On peut stocker la liste des sommets de chaque triangle:
+* C'est simple
+* C'est lourd en mémoire
+
+On peut partager des sommets qui sont commun a plusieurs triangle. Il faut donc stocker séparément les sommets des faces.
+
+**Triangulation de Delaunay**, cette représentation repose sur le diagramme de Voronoï. $\{x \in E; \forall qd(x,p) \leq d(x,q)\}$
+
+![Schéma voronoï](https://www-sop.inria.fr/prisme/fiches/Voronoi/voronoi.gif)
+
+
+## Misc
+
+* Cartes d'altitude
+
+    * On peut les construire par des strategies aleatoires ou iteratives.
+    Chaque altitude est liee a un type de terrain.
+![Example carte d'altitude](https://worldoftanks.eu/dcont/fb/imagesforarticles/dragon_ridge/dr13.jpg)
+
+* Blobs/Metaballs
+
+    * On peut s'en servir pour de la modelisation.
+    ([livre de reference](https://developer.nvidia.com/gpugems/GPUGems/))
+
+* L systems
+    * Inspiré de grammaire de THL.
+
+* scan 3D
+
+    * Pour certain films, les gens preferent faire leur modele 3D a la main, puis les numeriser.
+
+
+* Sculpture 3D
+
+    * On peut retoucher les objets en 3D avec des logiciels de sculpture.
+
+* Codage des Formes / Maillages
+
+    * Arretes aillées
+    * B-Rep
+    * Array of vertex
+    * Array of index
+
+* Vitesse de mouvement
+
+    * Elle n'est pas forcement lineaire.
+
+* Animation tissu vetement
+    * beaucoup  de calcul de collision
+
+* Textures
+    * plaquees 
+        * consommation de memoire elevee
+    * Projection
+        * triplanar
+        * cylindrique
+        * spherique
+    * Peinte en 3D
+    * Environnement au loin
+        * On utilise une skybox
+          Cela va permettre de faire des rendus de scene exterieure, plus simplement
+        
+    
