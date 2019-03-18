@@ -365,5 +365,22 @@ f(t) &= C_0G_0(t) + C_1G_1(t) + C_2G_2(t)\\
 
 On peut définir un filtre dans le domaine fréquentiel faire une transformé de fourier inverse pour l'avoir dans le domaine spatial puis appliquer une convolution.
 
+#### Détection des coins
+
+Gradient fort
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -5,7 +5,7 @@ Comme vous allez voir, il y a deux facettes à ce cours. il y a un volet assez t
 
 **[Support de cours](http://www.lrde.epita.fr/~gtochon/MASI/)**
 
-## Introduction
+## Introduction 
 
 ### Qu'est ce qu'un signal ?
 
@@ -70,7 +70,7 @@ $|z|^2 = z * \bar{z}$
 :::
 
 
-Le signal est un module borné.
+Le signal est un module borné. 
 :::info
 $\bar{\mathbb{R}} = \mathbb{R} \cup \{+\infty; -\infty\}$
 :::
@@ -86,13 +86,13 @@ C'est un espace vectoriel.
 En pratique dans cet espace vectoriel on va pouvoir definir:
 * une base
 * un produit scalaire
-* une norme
+* une norme 
 
 ### Fonctionnement du radar
 
 > Une onde se propage puis va buter contre un obstacle et refléchi un signal vers l'émeteur.
 
-L'operation qui mesure la ressemblance entre 2 element est le produit scalaire.
+L'operation qui mesure la ressemblance entre 2 element est le produit scalaire. 
 
 ## Produit scalaire
 
@@ -114,7 +114,7 @@ Si $x,y \in\mathbb{C}^n$.
 
 Produit hermitien (équivalent complexe du produit scalaire):
 :::info
-$\langle x, y  \rangle$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$
+$\langle x, y  \rangle$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$ 
 :::
 
 
@@ -123,7 +123,7 @@ $\langle x, y  \rangle$ = $\sum_{i=1}^nx_i \bar{y_i} = x^T\bar{y}$
 > $$
 \begin{align}
     \langle :\rangle  : &  E \times E \rightarrow \mathbb{R} \\
-          & (x, y) \rightarrow \langle x,y\rangle
+          & (x, y) \rightarrow \langle x,y\rangle 
 \end{align}
 $$
 
@@ -157,7 +157,7 @@ On peut définir une norme à partir d'un produit scalaire: $||x|| = \sqrt{\lang
 
 Inégalité de Cauchy Schwarz: $|\langle x,y \rangle| \leq ||x||.||y||$
 
-On peut définir une distance à partir d'une norme :
+On peut définir une distance à partir d'une norme : 
 $$d(x,y)=\sqrt{\langle x-y,x-y \rangle}$$
 
 
@@ -180,7 +180,7 @@ Ensemble des signaux d'énergie finie :
 $x \in \mathcal{L}^2(\mathbb{R}) \Longleftrightarrow \int_\mathbb{R} |x(t)|^2 dt \langle +\infty$ (energie du signal)
 
 
-Dans $\mathcal{L}^2 , \langle x,y \rangle = \int_{\mathbb{R}} x(t) \bar{y(t)}$
+Dans $\mathcal{L}^2 , \langle x,y \rangle = \int_{\mathbb{R}} x(t) \bar{y(t)}$ 
 
 
 Si $x, y$ à valeurs réelle $$\langle x,y \rangle=\int_\mathbb{R}x(t) y(t) dt\\
@@ -195,8 +195,8 @@ $y_\tau(t)  = y(t-\tau)$
 $y_\tau(0)  = y(-\tau) \Longleftrightarrow y(0)=y_\tau(\tau)$
 
 :::
-
-
+ 
+ 
 
 
 
@@ -205,7 +205,7 @@ $y_\tau(0)  = y(-\tau) \Longleftrightarrow y(0)=y_\tau(\tau)$
 $$x \in \mathcal{L}^2 (\mathbb{R}), \Gamma_{xx}(\tau) ~ = ~ \langle x(t), x(t - \tau)\rangle = \int_{\mathbb{R}}x(t) \overline{x(t - \tau)} dt$$
 
 
-* 1^er^ propriété
+* 1^er^ propriété 
   * $\Gamma_{xx}$ est maximale pour $\tau=0$
   * $\Gamma_{xx}(0) = \langle x(t),x(t)\rangle = \int_\mathbb{R}(x(t)^2)dt = ||x||^2 = \bar{\tau}_x$ car $\sqrt{ \langle x(t),x(t)\rangle} = ||x||$
 
@@ -246,7 +246,7 @@ Intercorrelation de 2 signaux $x, y \in \mathcal{L}^2(\mathbb{R})$, $y(t)=x(t-t_
 
 :::success
 Donc $\Gamma_{xy}$ est maximale en $- t_0$
-:::
+:::	
 
 $$y(t) = x(t) + \eta(t) \thicksim \mathcal{N}(0,\sigma^2)$$
 
@@ -285,10 +285,10 @@ $$
 3) Le produit de convolution est bilinéaire : $x * (y + \lambda z) = (x*y) + \lambda (x * z)$
 4) Le produit de convolution est associatif : $(x*y)*z = x*(y*z)$
 5) Le produit de convolution admet un élement neutre. Le delta de Dirac :
-$$\delta : t \rightarrow
+$$\delta : t \rightarrow 
 \begin{cases}
-    0 ~ \forall t \neq 0 \\
-    +\infty t = 0
+    0 ~ \forall t \neq 0 \\ 
+    +\infty t = 0 
 \end{cases} \\
 \int_\mathbb{R} \delta(t)dt = 1
 $$
@@ -313,7 +313,7 @@ $(x*y)'=x'*y=x*y'$
 
 $\Pi_T(t)=\begin{cases}1 ~\forall t\in [-\frac{T}{2}; \frac{T}{2}] \\ 0 ~ \text{sinon}\end{cases}$
 
-![Représentation fonction porte](https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Dfqwz-iTOmojUspk9cLrJwHaFH%26pid%3D15.1&f=1)
+![Représentation fonction porte](https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Dfqwz-iTOmojUspk9cLrJwHaFH%26pid%3D15.1&f=1) 
 
 [Elle est fausse, la notre vaut 1 aux bornes. TODO]
 
@@ -323,7 +323,7 @@ $\Pi_T(t)=\begin{cases}1 ~\forall t\in [-\frac{T}{2}; \frac{T}{2}] \\ 0 ~ \text{
                         &= \int_{-\frac{T}{2}}^{\frac{T}{2}}\Pi_T(t-x)dx
 \end{align}
 
-* Pas de chevauchement $\Leftrightarrow |t| > T$
+* Pas de chevauchement $\Leftrightarrow |t| > T$ 
 * Chevauchement max $t = 0$
 
 $$(\Pi_T * \Pi_T)(0)=\int_{-\frac{T}{2}}^{\frac{T}{2}} 1 dx = T$$
@@ -462,9 +462,9 @@ $\cos a \cos b = \frac{1}{2} (\cos (a+b) + \cos(a - b))$
 
 * Si $n \neq k$ :
 $$
-\int_{0}^{2\pi} \cos(nt) * \cos(kt) dt =  \int_{0}^{2 * \pi} 1 / 2 * (\cos(n + k)t) + \cos((n - t)t) dt\\
+\int_{0}^{2\pi} \cos(nt) * \cos(kt) dt =  \int_{0}^{2 * \pi} 1 / 2 * (\cos(n + k)t) + \cos((n - t)t) dt\\ 
 \frac{1}{2} \int_0^{2\pi} \cos((n + k)t)dt + \frac{1}{2} \int_0^{2\pi} \cos((n - k)t)dt \\
-= \frac{1}{2} [\frac{1}{n +k} \sin((n + k)t)]_{0}^{2\pi} + \frac{1}{2}[\frac{1}{n - k} \sin ((n - k)t)]_0^{2\pi}\\
+= \frac{1}{2} [\frac{1}{n +k} \sin((n + k)t)]_{0}^{2\pi} + \frac{1}{2}[\frac{1}{n - k} \sin ((n - k)t)]_0^{2\pi}\\ 
 = \frac{1}{2} \frac{1}{n+k}(\underbrace{\sin((n+k)2\pi)}_{=0} - \underbrace{\sin((n+k)0)}_{=0} + \dots = 0
 $$
 
@@ -498,7 +498,7 @@ $a_0$: On integre entre $0$ et $T$
 \end{align}
 
 
-$a_0 = \frac{1}{T} \int_0^T x(t)dt \equiv$ valeur moyenne de $x$ sur une periode
+$a_0 = \frac{1}{T} \int_0^T x(t)dt \equiv$ valeur moyenne de $x$ sur une periode  
 
 ---
 
@@ -573,7 +573,7 @@ $$
 > Calculer les coeficient de la série de fourier du signal en crénaux.
 > ![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Signal_creneau_symetrique.svg/1200px-Signal_creneau_symetrique.svg.png)
 > signal centre en $\frac{1}{2}$ et avec Ym = 1 et -Ym = 0
->
+> 
 > * $a_0 = \frac 1T \int_0^T x(t)dt = \frac 1T \int_0^{\frac T2}dt = \frac 12$
 > * $a_n = \frac 2T \int_0^T x(t)\cos(2\pi \frac nTt)=\frac 2T \int_0^{\frac T2}\cos(2\pi \frac nT t)dt\\ = \frac 2T \frac{T}{2\pi n}[\sin(2\pi \frac nTt)]^\frac T2_0 = \frac{1}{t /n}(\sin(tn)-sin(0))=0 \qquad\forall n \geq 1$
 > * $b_n = \frac 2T \int_0^T x(t)\sin(2\pi \frac nT t)dt = \frac 2T \int_0^{\frac T2}\sin(2\pi \frac nTt)dt\\=-\frac 2T \frac{T}{2\pi n}[\cos(2 \pi \frac nTt)]_0^{\frac T2} = - \frac{1}{\pi n}(\cos(n\pi)-\cos(0))=\frac{1}{\pi n}(1-\cos(n\pi))$
@@ -655,7 +655,7 @@ $C_n = \frac{1}{T} \int_0^T x(t) e^{-i2\pi \frac{n}{T}t}dt$
 
 $\langle x(t), y(t) \rangle = \frac{1}{T} \int_0^T x(t) \overline{y(t)} dt$
 $\langle x(t), y(t) \rangle = \int_{\mathbb{R}} x(t) \overline{y(t)} dt$
-On va admettre que $\{ U_n : t \rightarrow e^{i2\pi\frac{n}{T}t, n \in \mathbb{Z}}\}$ forme une base de $\mathcal{L}^2([0,T])$ et on va verifier qu'elle est orthonormee pour $\langle : \rangle$
+On va admettre que $\{ U_n : t \rightarrow e^{i2\pi\frac{n}{T}t, n \in \mathbb{Z}}\}$ forme une base de $\mathcal{L}^2([0,T])$ et on va verifier qu'elle est orthonormee pour $\langle : \rangle$ 
 
 
 
@@ -716,7 +716,7 @@ $C_n = \frac{1}{2}(a_n - b_n) = \begin{cases} 0 \text{ si n pair} \\ \frac{-i}{\
 $|C_n| \underbrace{\sim}_{n \rightarrow \infty} \frac{1}{n}$ pour tous les signaux avec une discontinuité
 
 
-* Si $x^{(0)}, x^{(1)}, x^{(2)}, x^{(k - 1)}$ sont des signaux continus,  et $x^{(k)}$ a des discontinuites, alors $|C_n| \underbrace{\sim}_{n \rightarrow + \infty} \frac{1}{n^{k + 1}}$
+* Si $x^{(0)}, x^{(1)}, x^{(2)}, x^{(k - 1)}$ sont des signaux continus,  et $x^{(k)}$ a des discontinuites, alors $|C_n| \underbrace{\sim}_{n \rightarrow + \infty} \frac{1}{n^{k + 1}}$ 
 
 $x(t) = \sum_{n=1}^{+\infty} C_n e^{i2\pi \frac{n}{T} t}$
 T periodique
@@ -738,7 +738,7 @@ $\rightarrow$ etude par la transformee de Fourier $\equiv$  generalisation des s
 \begin{align}
 X:\mathbb R \rightarrow \mathbb C\\
 \nu \rightarrow \int_{\mathbb R} x(t) e^{-i 2 \pi \color{orange}{\nu} t}dt\\
-C_n = \frac{1}{T} \int_{\frac{-T}{2} \rightarrow +\infty}^{\frac{T}{2} \rightarrow +\infty} x(t)e^{-i 2 \pi \color{orange}{\underbrace{\frac{n}{t}}_{\nu}}t}dt
+C_n = \frac{1}{T} \int_{\frac{-T}{2} \rightarrow +\infty}^{\frac{T}{2} \rightarrow +\infty} x(t)e^{-i 2 \pi \color{orange}{\underbrace{\frac{n}{t}}_{\nu}}t}dt 
 \end{align}
 :::
 
@@ -757,13 +757,13 @@ Condition d'existance de la TF:
 Si $x \in \mathcal L^1(\mathbb R)$, alors $X$ existe.
 
 Th de Dirichlet : $x(t) = \int_{-\infty}^{+\infty} X(\nu)e^{i2\pi{}\nu{}t} d\nu$
-
+ 
 :::info
 **Transformée de Fourier inverse :** Sous réserve d'existence, on peut inverser la transformée de Fourier : $\boxed{x(t)=\int_{-\infty}^{+\infty} X(u)^{+i2\pi ut}e ~du}$
 :::
 
 $F(\Pi_T(t)) = \widehat{\Pi}_T(u)= \int_{\mathbb R_{+\infty}} \Pi_T(t)e^{-i2 \pi ut}~dt=\int_{-\infty}^{+\infty}\Pi_T(t)e^{-i2\pi ut}~dt$
-
+ 
  \begin{align}
 \widehat{\Pi}_{T}(u) &= \int_{-\frac{T}{2}^{\frac{T}{2}}} e^{-i 2 \pi \nu t}dt\\
 &= -\frac{1}{i2 \pi \nu} [e^{-i2\pi\nu t}]_{\frac{-T}{2}}^{\frac{T}{2}}\\
@@ -772,7 +772,7 @@ $F(\Pi_T(t)) = \widehat{\Pi}_T(u)= \int_{\mathbb R_{+\infty}} \Pi_T(t)e^{-i2 \pi
 &=\frac{1}{\pi\nu}* \frac{e^{i\pi \nu T} -e^{-i\pi \nu T} }{2i}\\
 &=\frac{\sin(\pi\nu T)}{\pi\nu}\\
 \end{align}
-
+ 
 :::info
 **Sinus cardinal :**
 $$sinc:x \mapsto \begin{cases}
@@ -780,11 +780,11 @@ $$sinc:x \mapsto \begin{cases}
 1 &\qquad x=0
 \end{cases}$$
 :::
-
+ 
  $\mathcal{F}(\Pi_T(t) = \underbrace{T\underbrace{sinc}_{\text{sinus cardinal}}(\pi \nu T))}_{*schema*}$
-
+ 
 :::info
-dirac
+dirac 
 $\delta(\nu)$ = \begin{cases} \inf \qquad \space \text{ $\nu$ = 0} \\ 0 \qquad \quad \text{ $\nu$ $\neq$ 0}\end{cases}
 
 $\int_\mathbb R \delta(\nu) d\nu = 1$
@@ -803,7 +803,7 @@ $$
 $$
 
 $$
-x(t)\delta(t-t_0)=x(t_0)\delta(t-t_0) = \begin{cases} \inf \qquad \space \text{t = $t_0$} \\ 0 \qquad \quad \text{t $\neq$ $t_0$}\end{cases}
+x(t)\delta(t-t_0)=x(t_0)\delta(t-t_0) = \begin{cases} \inf \qquad \space \text{t = $t_0$} \\ 0 \qquad \quad \text{t $\neq$ $t_0$}\end{cases} 
 $$
 $$
 et \int_\mathbb R x(t) \delta(t-t_0)dt = x(t_0)
@@ -927,3 +927,18 @@ la transformee de Fourrier d'une gaussienne est une gaussienne
 $x_N = x_\infty * \Pi_N$
 $\mathbb F(x_N) = \mathbb F(x_\infty * \pi_N)$
 $\qquad \: \: \: \: = \mathbb F(x_\infty) * \mathbb (\Pi_N)$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--- 
